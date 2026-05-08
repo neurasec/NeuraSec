@@ -1168,48 +1168,53 @@
 
 <!-- ══════════ SCRIPTS ══════════ -->
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+
 /* ── Nav toggle ── */
 const toggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
-toggle.addEventListener('click', () => {
-  const open = navLinks.classList.toggle('open');
-  toggle.setAttribute('aria-expanded', open);
-});
-navLinks.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => { navLinks.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
-});
+if (toggle && navLinks) {
+  toggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => { navLinks.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+  });
+}
 
 /* ── Active nav on scroll ── */
 const sections = document.querySelectorAll('section[id]');
 const navAnchors = document.querySelectorAll('.nav__links a');
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      navAnchors.forEach(a => a.classList.remove('active'));
-      const active = document.querySelector(`.nav__links a[href="#${e.target.id}"]`);
-      if (active) active.classList.add('active');
-    }
-  });
-}, { threshold: 0.25 });
-sections.forEach(s => obs.observe(s));
+if (sections.length && navAnchors.length) {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navAnchors.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`.nav__links a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(s => obs.observe(s));
+}
 
 /* ── Abstract toggle ── */
-function toggleAbstract(btn) {
+window.toggleAbstract = function(btn) {
   const body = btn.nextElementSibling;
   const open = body.classList.toggle('open');
   btn.textContent = open ? '▾ Abstract' : '▸ Abstract';
   btn.setAttribute('aria-expanded', open);
-}
+};
 
 /* ── Go to top ── */
 const goTopBtn = document.getElementById('goTop');
-window.addEventListener('scroll', () => {
-  goTopBtn.classList.toggle('visible', window.scrollY > 400);
-});
-goTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-
-/* ── Stat counter animation ── */
-/* stat counters removed — values hardcoded */
+if (goTopBtn) {
+  window.addEventListener('scroll', () => {
+    goTopBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+  goTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+}
 
 /* ── Pub filter ── */
 document.querySelectorAll('.pub-filter__btn').forEach(btn => {
@@ -1218,14 +1223,12 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
     btn.classList.add('active');
     const filter = btn.dataset.filter;
     document.querySelectorAll('.pub-item').forEach(item => {
-      if (filter === 'all' || item.dataset.status === filter) {
-        item.style.display = '';
-      } else {
-        item.style.display = 'none';
-      }
+      item.style.display = (filter === 'all' || item.dataset.status === filter) ? '' : 'none';
     });
   });
 });
+
+}); // end DOMContentLoaded
 
 /* ── Visitor counter (localStorage-based, auto-increments per session) ── */
 (function() {
