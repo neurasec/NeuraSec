@@ -78,45 +78,8 @@
       padding-block: 3.5rem;
     }
 
-    #worldMap {
-      width: 100%;
-      height: 420px;
-      min-height: 260px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      background: #eef2f8;
-      position: relative;
-      z-index: 0;
-      overflow: hidden;
-    }
 
-    .map-country { fill: #c8d6e8; stroke: white; stroke-width: .4; transition: fill .2s; }
-    .map-country.active { fill: var(--accent); }
-    .map-country:hover { fill: var(--accent-mid); cursor: pointer; }
-
-    .map-dot {
-      fill: #ef4444;
-      stroke: white;
-      stroke-width: 1.5;
-      cursor: pointer;
-      transition: r .2s;
-    }
-    .map-dot:hover { r: 7; }
-
-    .map-tooltip {
-      position: absolute;
-      background: var(--text-primary);
-      color: white;
-      font-size: .78rem;
-      padding: .45rem .75rem;
-      border-radius: var(--radius-sm);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity .15s;
-      white-space: nowrap;
-      z-index: 10;
-    }
-
+    /* map-legend used by Leaflet section */
     .map-legend {
       display: flex;
       flex-wrap: wrap;
@@ -126,10 +89,9 @@
       color: var(--text-muted);
     }
     .map-legend-item { display: flex; align-items: center; gap: .4rem; }
-    .map-legend-dot { width: 10px; height: 10px; background: #ef4444; border-radius: 50%; border: 1.5px solid white; box-shadow: 0 0 0 1px #ef4444; }
 
-    /* Projects section – removed from main nav, stays in page */
-    .projects-section { display: none; } /* hidden since user didn't ask for it this time */
+    /* Projects section – hidden */
+    .projects-section { display: none; }
 
     /* Citation / doi link */
     .pub-item__doi { text-decoration: none; }
@@ -171,6 +133,73 @@
       margin-top: .4rem;
     }
     .expertise-tags .kw { font-size: .68rem; }
+    /* ── Join Us tabs ── */
+    .join-tab {
+      padding: .4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: none;
+      font-size: .82rem;
+      font-family: var(--font-base);
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background .15s, border-color .15s, color .15s;
+      font-weight: 500;
+    }
+    .join-tab.active, .join-tab:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+    .join-panel { display: none; }
+    .join-panel.active { display: block; }
+
+    .join-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .join-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .join-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent-mid); }
+    .join-card__icon { font-size: 1.5rem; }
+    .join-card__title { font-size: .95rem; font-weight: 600; color: var(--text-primary); }
+    .join-card__desc { font-size: .84rem; color: var(--text-muted); line-height: 1.6; flex: 1; }
+    .join-card__req { font-size: .78rem; color: var(--text-muted); padding: .5rem .75rem; background: var(--accent-pale); border-radius: var(--radius-sm); margin-top: .25rem; line-height: 1.5; }
+    .join-card__req strong { color: var(--accent); }
+
+    /* ── Leaflet custom pin overrides ── */
+    .leaflet-popup-content-wrapper {
+      border-radius: 10px !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,.18) !important;
+      font-family: var(--font-base) !important;
+      border: 1px solid var(--border-light);
+    }
+    .leaflet-popup-content {
+      margin: 12px 16px !important;
+      font-size: 13px !important;
+      line-height: 1.6 !important;
+      color: var(--text-body) !important;
+      min-width: 180px;
+    }
+    .leaflet-popup-content b { color: var(--text-primary); font-size: 13.5px; }
+    .leaflet-popup-tip { background: white !important; }
+    .leaflet-popup-close-button { color: var(--text-muted) !important; font-size: 18px !important; top: 6px !important; right: 8px !important; }
+    .leaflet-popup-close-button:hover { color: var(--accent) !important; }
+    .leaflet-container { font-family: var(--font-base) !important; }
+    .leaflet-control-attribution { font-size: 10px !important; }
+
+    /* map legend */
+    .map-legend { display:flex; flex-wrap:wrap; gap:1.25rem; font-size:.8rem; color:var(--text-muted); align-items:center; }
+    .map-legend-item { display:flex; align-items:center; gap:.45rem; }
   </style>
 </head>
 <body>
@@ -205,6 +234,7 @@
       <li><a href="#map-section">Global Reach</a></li>
       <li><a href="#tools">Tools</a></li>
       <li><a href="#news">News</a></li>
+      <li><a href="#join">Join Us</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
@@ -950,23 +980,30 @@
 </section>
 
 
-<!-- ══════════ WORLD MAP ══════════ -->
+<!-- ══════════ WORLD MAP (Leaflet + OpenStreetMap) ══════════ -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <section class="section map-section" id="map-section" aria-labelledby="map-heading">
   <div class="container">
     <div class="section-header">
       <span class="section-label">Global Reach</span>
       <h2 class="section-title" id="map-heading">Member Locations</h2>
-      <p class="section-sub">NeuraSec spans 8+ countries across 4 continents — hover the pins to explore our global network.</p>
+      <p class="section-sub">NeuraSec spans 8+ countries across 4 continents — click the pins to explore our global network of researchers and advisors.</p>
     </div>
 
-    <div id="worldMap" role="region" aria-label="World map showing NeuraSec member locations" style="position:relative;"></div>
+    <div id="leafletMap" role="region" aria-label="Interactive world map showing NeuraSec member locations" style="width:100%;height:460px;border-radius:12px;border:1px solid var(--border);overflow:hidden;z-index:0;"></div>
 
-
-    <div class="map-legend" aria-label="Map legend">
-      <div class="map-legend-item"><div class="map-legend-dot"></div> Member / Institution location</div>
+    <div class="map-legend" aria-label="Map legend" style="margin-top:1rem;">
+      <div class="map-legend-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="12" cy="10" r="5" fill="#1a3a6b"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#2558a8" opacity=".9"/><circle cx="12" cy="9.5" r="2.5" fill="white" opacity=".9"/></svg>
+        Research member or affiliated institution
+      </div>
+      <div class="map-legend-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><circle cx="12" cy="10" r="5" fill="#166534"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#16a34a" opacity=".9"/><circle cx="12" cy="9.5" r="2.5" fill="white" opacity=".9"/></svg>
+        International advisor
+      </div>
     </div>
 
-    <!-- Country list fallback -->
+    <!-- Country badge fallback -->
     <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem" role="list" aria-label="Countries represented">
       <span class="badge badge--blue" role="listitem">🇵🇰 Pakistan</span>
       <span class="badge badge--blue" role="listitem">🇦🇺 Australia</span>
@@ -1125,6 +1162,142 @@
   </div>
 </section>
 
+<!-- ══════════ JOIN US ══════════ -->
+<section class="section section--alt" id="join" aria-labelledby="join-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Get Involved</span>
+      <h2 class="section-title" id="join-heading">Join NeuraSec</h2>
+      <p class="section-sub">We are an open, collaborative, and international research community. Whether you're a student, researcher, or faculty — there's a place for you here.</p>
+    </div>
+
+    <!-- Collaboration banner -->
+    <div style="background:linear-gradient(135deg,var(--accent) 0%,#2558a8 100%);border-radius:var(--radius-lg);padding:2rem 2.25rem;color:white;margin-bottom:2rem;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:.4rem;">Open to Collaboration</div>
+        <div style="font-family:var(--font-serif);font-size:1.25rem;font-weight:600;line-height:1.35;max-width:42ch;">We welcome research collaborations, joint publications, and scholarly discussions from around the world.</div>
+        <p style="margin-top:.65rem;font-size:.875rem;color:rgba(255,255,255,.78);max-width:52ch;line-height:1.6;">If you share our interest in AI security, deep learning, NLP, or XAI — reach out. We believe great research happens through open exchange.</p>
+      </div>
+      <a href="mailto:neurasec1@gmail.com?subject=Collaboration%20Inquiry%20—%20NeuraSec" style="display:inline-flex;align-items:center;gap:.5rem;background:white;color:var(--accent);border-radius:var(--radius);padding:.75rem 1.35rem;font-weight:600;font-size:.9rem;text-decoration:none;flex-shrink:0;transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+        ✉ Reach Out <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <!-- Opportunity tabs -->
+    <div class="join-tabs" role="tablist" aria-label="Joining options" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem;">
+      <button class="join-tab active" data-tab="students" role="tab" aria-selected="true">🎓 Students</button>
+      <button class="join-tab" data-tab="researchers" role="tab" aria-selected="false">🔬 Researchers</button>
+      <button class="join-tab" data-tab="advisors" role="tab" aria-selected="false">🌐 International Advisors</button>
+      <button class="join-tab" data-tab="collab" role="tab" aria-selected="false">🤝 Industry / Collab</button>
+    </div>
+
+    <!-- Tab panels -->
+    <div class="join-panel active" id="tab-students" role="tabpanel">
+      <div class="join-cards-grid">
+        <div class="join-card">
+          <div class="join-card__icon">📚</div>
+          <h3 class="join-card__title">Research Mentorship</h3>
+          <p class="join-card__desc">Get guided on your first research paper from topic selection to submission, under direct supervision of experienced members.</p>
+          <div class="join-card__req"><strong>Who:</strong> BS/MS/PhD students with strong ML or security background</div>
+        </div>
+        <div class="join-card">
+          <div class="join-card__icon">✍️</div>
+          <h3 class="join-card__title">Co-Authorship</h3>
+          <p class="join-card__desc">Contribute to active ongoing projects and earn co-authorship on peer-reviewed journal or conference papers.</p>
+          <div class="join-card__req"><strong>Who:</strong> Students who can commit to 3–6 months on a research task</div>
+        </div>
+        <div class="join-card">
+          <div class="join-card__icon">🛠️</div>
+          <h3 class="join-card__title">Open-Source Tools</h3>
+          <p class="join-card__desc">Help build NeuraSec's open-source research tooling — datasets, pipelines, and benchmarks used by the broader community.</p>
+          <div class="join-card__req"><strong>Who:</strong> Students strong in Python, ML engineering, or full-stack dev</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="join-panel" id="tab-researchers" role="tabpanel" hidden>
+      <div class="join-cards-grid">
+        <div class="join-card">
+          <div class="join-card__icon">🔗</div>
+          <h3 class="join-card__title">Joint Publications</h3>
+          <p class="join-card__desc">Partner with us on papers targeting top-tier journals (Springer, Elsevier, IEEE) or venues like ICCK and NeurIPS workshops.</p>
+          <div class="join-card__req"><strong>Who:</strong> Independent researchers and postdocs with active research tracks</div>
+        </div>
+        <div class="join-card">
+          <div class="join-card__icon">💬</div>
+          <h3 class="join-card__title">Research Discussions</h3>
+          <p class="join-card__desc">Exchange ideas, review manuscripts, or brainstorm new directions. No formal commitment needed — just intellectual curiosity.</p>
+          <div class="join-card__req"><strong>Who:</strong> Anyone working at the intersection of AI and security</div>
+        </div>
+        <div class="join-card">
+          <div class="join-card__icon">📊</div>
+          <h3 class="join-card__title">Dataset & Benchmark Sharing</h3>
+          <p class="join-card__desc">Share or co-develop datasets, benchmarks, and evaluation frameworks for the AI security community.</p>
+          <div class="join-card__req"><strong>Who:</strong> Researchers with specialized domain data or evaluation expertise</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="join-panel" id="tab-advisors" role="tabpanel" hidden>
+      <div class="join-cards-grid">
+        <div class="join-card">
+          <div class="join-card__icon">🌍</div>
+          <h3 class="join-card__title">International Advisor Role</h3>
+          <p class="join-card__desc">Join our advisory board, guide the group's research direction, and mentor early-career researchers. Lightweight commitment, high impact.</p>
+          <div class="join-card__req"><strong>Who:</strong> Faculty or senior researchers outside Pakistan with proven publication record</div>
+        </div>
+        <div class="join-card">
+          <div class="join-card__icon">🏛️</div>
+          <h3 class="join-card__title">Institutional Partnership</h3>
+          <p class="join-card__desc">Establish a formal collaborative link between your institution and NeuraSec for student exchanges, seminars, and co-supervised research.</p>
+          <div class="join-card__req"><strong>Who:</strong> Universities and research labs interested in Pakistan–international collaboration</div>
+        </div>
+        <div class="join-card">
+          <div class="join-card__icon">🎤</div>
+          <h3 class="join-card__title">Guest Seminars & Talks</h3>
+          <p class="join-card__desc">Deliver a virtual seminar to NeuraSec members on your research. We'll share it with our student and research community.</p>
+          <div class="join-card__req"><strong>Who:</strong> Any researcher with an interesting topic to share</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="join-panel" id="tab-collab" role="tabpanel" hidden>
+      <div class="join-cards-grid">
+        <div class="join-card">
+          <div class="join-card__icon">🏢</div>
+          <h3 class="join-card__title">Applied Research Projects</h3>
+          <p class="join-card__desc">Bring real-world problems in cybersecurity, AI, or data science. We'll work with you to design and execute rigorous research solutions.</p>
+          <div class="join-card__req"><strong>Who:</strong> Companies and startups in security, fintech, health-tech, or AI</div>
+        </div>
+        <div class="join-card">
+          <div class="join-card__icon">📰</div>
+          <h3 class="join-card__title">Sponsored Research</h3>
+          <p class="join-card__desc">Fund a specific research direction aligned with your organization's mission. Publications remain open-access and academically independent.</p>
+          <div class="join-card__req"><strong>Who:</strong> Organizations seeking research impact with academic credibility</div>
+        </div>
+        <div class="join-card">
+          <div class="join-card__icon">🔍</div>
+          <h3 class="join-card__title">Consulting & Advisory</h3>
+          <p class="join-card__desc">Leverage NeuraSec expertise for AI security audits, model evaluation, threat analysis, or technology assessment engagements.</p>
+          <div class="join-card__req"><strong>Who:</strong> Teams needing specialized AI/cybersecurity domain knowledge</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA footer -->
+    <div style="margin-top:2rem;padding:1.5rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-weight:600;color:var(--text-primary);margin-bottom:.2rem;">Ready to connect?</div>
+        <p style="font-size:.875rem;color:var(--text-muted);margin:0;">Drop us a message at <a href="mailto:neurasec1@gmail.com" style="color:var(--accent-mid);font-weight:500;">neurasec1@gmail.com</a> with a brief intro and what you'd like to work on. We reply to every serious inquiry.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:.6rem;flex-shrink:0;">
+        <a href="mailto:neurasec1@gmail.com?subject=Join%20NeuraSec%20—%20Inquiry" class="contact-item" style="background:var(--accent);border-color:var(--accent);color:white;">✉ Email Us</a>
+        <a href="https://www.linkedin.com/in/hassanahmed1166/" target="_blank" rel="noopener" class="contact-item">in LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════ CONTACT ══════════ -->
 <section class="section section--alt" id="contact" aria-labelledby="contact-heading">
   <div class="container">
@@ -1169,6 +1342,7 @@
 
 
 <!-- ══════════ SCRIPTS ══════════ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/sp38=" crossorigin=""></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -1229,16 +1403,202 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
       item.style.display = match ? '' : 'none';
       if (match) {
         item.style.animation = 'none';
-        item.offsetHeight; // reflow
+        item.offsetHeight;
         item.style.animation = '';
       }
     });
   });
 });
 
-}); // end DOMContentLoaded
+/* ── Join Us tabs ── */
+document.querySelectorAll('.join-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.join-tab').forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.join-panel').forEach(p => {
+      p.classList.remove('active');
+      p.hidden = true;
+    });
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    const panel = document.getElementById('tab-' + tab.dataset.tab);
+    if (panel) { panel.classList.add('active'); panel.hidden = false; }
+  });
+});
 
-/* ── Visitor counter (localStorage-based, auto-increments per session) ── */
+/* ── Leaflet Map ── */
+(function() {
+  var mapEl = document.getElementById('leafletMap');
+  if (!mapEl || typeof L === 'undefined') return;
+
+  // Initialize map centered on a world view
+  var map = L.map('leafletMap', {
+    center: [25, 40],
+    zoom: 2,
+    minZoom: 2,
+    maxZoom: 10,
+    zoomControl: true,
+    attributionControl: true,
+    scrollWheelZoom: false  // prevent hijacking page scroll; user can enable with click
+  });
+
+  // Enable scroll zoom on click inside map
+  map.once('focus', function() { map.scrollWheelZoom.enable(); });
+  mapEl.addEventListener('click', function() { map.scrollWheelZoom.enable(); });
+
+  // OpenStreetMap tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  // ── Custom SVG pin icons ──
+  function makeIcon(color, size) {
+    size = size || 34;
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 32" width="' + size + '" height="' + Math.round(size*32/24) + '">'
+      + '<filter id="shadow"><feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-opacity="0.28"/></filter>'
+      + '<g filter="url(#shadow)">'
+      + '<path d="M12 0C7.58 0 4 3.58 4 8c0 6.5 8 16 8 16s8-9.5 8-16c0-4.42-3.58-8-8-8z" fill="' + color + '"/>'
+      + '<circle cx="12" cy="8" r="3.2" fill="rgba(255,255,255,0.92)"/>'
+      + '</g></svg>';
+    return L.divIcon({
+      html: svg,
+      className: '',
+      iconSize: [size, Math.round(size*32/24)],
+      iconAnchor: [size/2, Math.round(size*32/24)],
+      popupAnchor: [0, -Math.round(size*32/24)]
+    });
+  }
+
+  var memberIcon  = makeIcon('#1a3a6b'); // navy – core members
+  var advisorIcon = makeIcon('#166534'); // green – advisors
+
+  // ── Pin data ──
+  var pins = [
+    {
+      lat: 33.6, lng: 73.1,
+      type: 'member',
+      flag: '🇵🇰', country: 'Pakistan',
+      title: 'Islamabad / Faisalabad, Pakistan',
+      members: [
+        'Hassan Ahmed — Founder, Lead Researcher (FAST-NUCES CFD)',
+        'Abdullah Khan — Co-Founder (University of Wah)',
+        'Abdul Mateen', 'Arooj Fatima', 'Ridda Jameel',
+        'Kanwal Naz', 'Ghalib Nadeem', 'Shahzad Tanveer',
+        'Aini Saba', 'Zeshaan Ali', 'Saood Ahmed',
+        'Nimra Farooq', 'Qasim Ali'
+      ]
+    },
+    {
+      lat: -26.65, lng: 153.07,
+      type: 'advisor',
+      flag: '🇦🇺', country: 'Australia',
+      title: 'Sunshine Coast, Australia',
+      members: ['Dr. Shahrzad Saremi — International Advisor', 'University of the Sunshine Coast']
+    },
+    {
+      lat: -28.82, lng: 153.36,
+      type: 'advisor',
+      flag: '🇦🇺', country: 'Australia',
+      title: 'Lismore, NSW — Southern Cross Univ.',
+      members: ['Dr. Rania Shibl — International Advisor', 'Southern Cross University']
+    },
+    {
+      lat: 52.48, lng: -1.89,
+      type: 'advisor',
+      flag: '🇬🇧', country: 'United Kingdom',
+      title: 'Birmingham, United Kingdom',
+      members: ['Dr. Imane Guellil — International Advisor', 'University of Birmingham']
+    },
+    {
+      lat: 46.05, lng: 14.51,
+      type: 'advisor',
+      flag: '🇸🇮', country: 'Slovenia',
+      title: 'Ljubljana, Slovenia',
+      members: ['Dr. Tanja Pavleska — International Advisor', 'Jozef Stefan Institute']
+    },
+    {
+      lat: 59.93, lng: 10.72,
+      type: 'member',
+      flag: '🇳🇴', country: 'Norway',
+      title: 'Oslo, Norway',
+      members: ['Muhammad Yousaf', 'Simula Research Laboratory']
+    },
+    {
+      lat: 30.51, lng: 114.30,
+      type: 'member',
+      flag: '🇨🇳', country: 'China',
+      title: 'Wuhan, China (HUST)',
+      members: ['Ali Raza Kashif', 'Huazhong University of Science & Technology']
+    },
+    {
+      lat: 40.00, lng: 116.30,
+      type: 'member',
+      flag: '🇨🇳', country: 'China',
+      title: 'Beijing, China (Tsinghua)',
+      members: ['Hassan Khan', 'Tsinghua University']
+    },
+    {
+      lat: 13.74, lng: 100.52,
+      type: 'member',
+      flag: '🇹🇭', country: 'Thailand',
+      title: 'Bangkok, Thailand',
+      members: ['Farasat Haider', 'Chulalongkorn University']
+    },
+    {
+      lat: -7.77, lng: 110.37,
+      type: 'member',
+      flag: '🇮🇩', country: 'Indonesia',
+      title: 'Yogyakarta, Indonesia',
+      members: ['Ike Devi Sulistyaningtyas', 'Universitas Atma Jaya Yogyakarta']
+    },
+    {
+      lat: 25.29, lng: 51.53,
+      type: 'member',
+      flag: '🇶🇦', country: 'Qatar',
+      title: 'Doha, Qatar',
+      members: ['Sohaib Ahmed']
+    }
+  ];
+
+  // ── Add markers ──
+  pins.forEach(function(pin) {
+    var icon = pin.type === 'advisor' ? advisorIcon : memberIcon;
+    var typeLabel = pin.type === 'advisor' ? 'International Advisor' : 'Research Member';
+    var typeColor = pin.type === 'advisor' ? '#166534' : '#1a3a6b';
+    var typeBg    = pin.type === 'advisor' ? '#dcfce7' : '#e8eef8';
+
+    var membersHTML = pin.members.map(function(m) {
+      return '<div style="padding:.18rem 0;border-bottom:1px solid #f0f0f0;">' + m + '</div>';
+    }).join('');
+
+    var popupHTML =
+      '<div style="min-width:200px;max-width:280px;">' +
+      '<div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.5rem;">' +
+        '<span style="font-size:1.2rem;">' + pin.flag + '</span>' +
+        '<strong style="font-size:13.5px;color:#1a1d23;">' + pin.title + '</strong>' +
+      '</div>' +
+      '<div style="display:inline-block;padding:.12rem .5rem;border-radius:100px;font-size:.68rem;font-weight:600;background:' + typeBg + ';color:' + typeColor + ';margin-bottom:.55rem;">' + typeLabel + '</div>' +
+      '<div style="font-size:.8rem;color:#3a3f4b;line-height:1.6;">' + membersHTML + '</div>' +
+      '</div>';
+
+    var marker = L.marker([pin.lat, pin.lng], { icon: icon, title: pin.country });
+    marker.bindPopup(popupHTML, { maxWidth: 300, className: 'neurasec-popup' });
+    marker.addTo(map);
+
+    // Hover to open popup on desktop
+    marker.on('mouseover', function() { this.openPopup(); });
+  });
+
+})(); // end Leaflet map IIFE
+
+}); // end DOMContentLoaded
+</script>
+
+<!-- ── Visitor counter (outside DOMContentLoaded — runs immediately) ── -->
+<script>
 (function() {
   try {
     const key = 'neurasec_visits';
@@ -1249,222 +1609,19 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
       localStorage.setItem(key, count);
       sessionStorage.setItem(sessionKey, '1');
     }
-    // Seed with a base count to look realistic on first visit
     const displayCount = count + 1247;
     let shown = 0;
-    const target = displayCount;
-    const step = Math.ceil(target / 40);
+    const step = Math.ceil(displayCount / 40);
     const timer = setInterval(() => {
       shown += step;
-      if (shown >= target) {
-        shown = target;
-        clearInterval(timer);
-      }
-      document.getElementById('visitorCount').textContent = shown.toLocaleString();
+      if (shown >= displayCount) { shown = displayCount; clearInterval(timer); }
+      const el = document.getElementById('visitorCount');
+      if (el) el.textContent = shown.toLocaleString();
     }, 18);
   } catch(e) {
-    document.getElementById('visitorCount').textContent = '1,248';
+    const el = document.getElementById('visitorCount');
+    if (el) el.textContent = '1,248';
   }
-})();
-
-/* ── World Map (self-contained SVG — no external deps) ── */
-(function() {
-  var W = 960, H = 460;
-
-  // Natural Earth simplified paths — accurate country outlines
-  var lands = [
-    // North America mainland
-    "M167,75 L173,70 L182,68 L193,72 L204,74 L213,71 L220,74 L224,80 L219,86 L215,95 L218,104 L214,112 L208,118 L200,122 L194,130 L191,140 L186,148 L180,155 L174,158 L168,153 L162,145 L158,135 L155,124 L156,113 L160,103 L162,93 L163,83 Z",
-    // Greenland
-    "M220,28 L235,22 L250,24 L258,32 L255,42 L245,48 L232,46 L222,40 Z",
-    // Alaska
-    "M115,55 L128,52 L138,58 L135,66 L122,68 L112,63 Z",
-    // Central America
-    "M175,158 L183,155 L188,162 L184,170 L177,168 Z",
-    // Caribbean
-    "M210,140 L217,138 L218,143 L212,144 Z",
-    // South America
-    "M190,175 L202,168 L216,170 L228,178 L236,190 L240,205 L244,222 L246,240 L242,260 L234,278 L222,292 L210,298 L198,292 L190,278 L184,260 L183,240 L185,218 L186,198 Z",
-    // UK + Ireland
-    "M422,76 L428,72 L434,75 L432,82 L425,83 Z",
-    "M415,79 L419,76 L421,82 L417,84 Z",
-    // Scandinavia
-    "M452,48 L462,42 L472,44 L478,52 L474,62 L466,68 L458,66 L452,58 Z",
-    "M436,60 L444,56 L448,62 L446,70 L440,72 L436,66 Z",
-    // Iceland
-    "M390,50 L400,47 L406,52 L402,58 L393,57 Z",
-    // Europe mainland
-    "M428,82 L440,78 L452,76 L466,78 L480,80 L490,86 L496,94 L494,102 L486,108 L476,112 L464,110 L454,106 L446,100 L438,96 L430,92 Z",
-    // Iberian Peninsula
-    "M420,100 L432,96 L440,102 L438,114 L428,120 L418,116 L416,106 Z",
-    // Italy
-    "M455,100 L462,98 L468,104 L466,114 L462,122 L456,118 L454,108 Z",
-    // Balkans / Greece
-    "M470,100 L480,98 L486,106 L482,114 L474,116 L468,110 Z",
-    // Africa
-    "M430,128 L450,122 L470,120 L490,124 L508,132 L520,144 L526,160 L528,178 L524,196 L516,214 L504,230 L490,244 L474,252 L458,250 L444,240 L434,224 L428,206 L424,186 L422,164 L424,144 Z",
-    // Madagascar
-    "M516,230 L522,224 L526,232 L524,244 L518,248 L514,240 Z",
-    // Russia / Siberia
-    "M490,52 L520,46 L560,42 L600,40 L640,42 L680,46 L714,52 L730,60 L724,70 L700,76 L670,78 L640,76 L610,72 L580,68 L550,66 L520,66 L496,66 L488,60 Z",
-    // Kazakhstan / Central Asia
-    "M530,80 L570,76 L606,78 L620,86 L616,96 L600,100 L570,100 L544,96 L528,90 Z",
-    // Middle East
-    "M492,108 L514,104 L530,108 L540,118 L536,130 L522,136 L506,134 L494,126 L490,116 Z",
-    // Arabian Peninsula
-    "M510,130 L530,126 L546,132 L550,148 L542,162 L526,170 L510,164 L502,150 L504,136 Z",
-    // South Asia (India)
-    "M572,110 L592,106 L610,108 L622,118 L624,132 L618,148 L606,162 L592,170 L576,164 L566,150 L562,134 L564,120 Z",
-    // Sri Lanka
-    "M598,174 L604,170 L607,176 L602,180 Z",
-    // China / East Asia
-    "M620,72 L660,68 L698,70 L720,78 L728,90 L722,104 L706,114 L684,120 L660,120 L638,114 L622,104 L616,90 L618,78 Z",
-    // Korea
-    "M712,90 L720,86 L726,92 L722,100 L714,102 L710,96 Z",
-    // Japan
-    "M730,82 L740,78 L748,84 L744,94 L736,96 L728,90 Z",
-    "M724,98 L730,96 L733,103 L728,107 L722,104 Z",
-    // Southeast Asia mainland
-    "M650,120 L670,116 L688,120 L694,132 L686,144 L668,148 L650,142 L642,130 Z",
-    // Indochina peninsula
-    "M672,144 L686,140 L696,150 L692,164 L680,170 L668,164 L664,152 Z",
-    // Malay Peninsula
-    "M676,166 L684,162 L688,170 L684,180 L676,178 Z",
-    // Indonesia (Sumatra)
-    "M678,178 L700,172 L714,176 L716,186 L700,190 L680,188 Z",
-    // Indonesia (Java)
-    "M694,192 L714,188 L726,192 L726,198 L706,200 L694,198 Z",
-    // Indonesia (Borneo)
-    "M706,170 L726,166 L740,170 L744,182 L736,192 L716,194 L704,186 L702,174 Z",
-    // Philippines
-    "M718,140 L726,136 L732,142 L730,152 L720,156 L714,148 Z",
-    // Australia
-    "M686,248 L714,238 L744,236 L768,242 L784,254 L790,270 L786,288 L774,302 L754,312 L730,316 L706,310 L688,296 L678,278 L678,260 Z",
-    // New Zealand (North)
-    "M802,302 L810,296 L814,306 L808,314 L800,312 Z",
-    // New Zealand (South)
-    "M798,314 L808,310 L812,322 L806,334 L796,330 Z",
-    // Japan Hokkaido
-    "M736,74 L744,70 L750,76 L746,84 L738,84 Z",
-    // Taiwan
-    "M714,124 L718,120 L722,126 L718,132 L712,130 Z",
-  ]
-
-  var pins = [
-    { label: '<b>🇵🇰 Pakistan</b><br>Hassan Ahmed, Abdullah Khan, Abdul Mateen,<br>Arooj Fatima, Ridda Jameel, Kanwal Naz,<br>Ghalib Nadeem, Shahzad Tanveer, Aini Saba,<br>Zeshaan Ali, Saood Ahmed, Nimra Farooq, Qasim Ali', lat: 33.6, lon: 73.1 },
-    { label: '<b>🇦🇺 Australia</b><br>Dr. Shahrzad Saremi (Sunshine Coast)<br>Dr. Rania Shibl (Southern Cross Univ.)', lat: -25.3, lon: 133.8 },
-    { label: '<b>🇬🇧 United Kingdom</b><br>Dr. Imane Guellil (Univ. of Birmingham)', lat: 52.5, lon: -1.9 },
-    { label: '<b>🇸🇮 Slovenia</b><br>Dr. Tanja Pavleska (Jozef Stefan Institute)', lat: 46.1, lon: 14.8 },
-    { label: '<b>🇳🇴 Norway</b><br>Muhammad Yousaf (Simula Research Lab)', lat: 59.9, lon: 10.7 },
-    { label: '<b>🇨🇳 China</b><br>Ali Raza Kashif (HUST)<br>Hassan Khan (Tsinghua)', lat: 35.9, lon: 104.2 },
-    { label: '<b>🇹🇭 Thailand</b><br>Farasat Haider (Chulalongkorn Univ.)', lat: 13.7, lon: 100.5 },
-    { label: '<b>🇮🇩 Indonesia</b><br>Ike Devi Sulistyaningtyas<br>(Univ. Atma Jaya Yogyakarta)', lat: -7.8, lon: 110.4 },
-    { label: '<b>🇶🇦 Qatar</b><br>Sohaib Ahmed', lat: 25.3, lon: 51.2 },
-  ];
-
-  function lonToX(lon) { return (lon + 180) * (W / 360); }
-  function latToY(lat) { return (90 - lat) * (H / 180); }
-
-  // Build SVG
-  var ns = 'http://www.w3.org/2000/svg';
-  var svg = document.createElementNS(ns, 'svg');
-  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-  svg.setAttribute('xmlns', ns);
-  svg.style.cssText = 'width:100%;height:100%;display:block;border-radius:inherit;';
-
-  // Ocean background
-  var bg = document.createElementNS(ns, 'rect');
-  bg.setAttribute('width', W); bg.setAttribute('height', H);
-  bg.setAttribute('fill', '#d4e5f7');
-  svg.appendChild(bg);
-
-  // Land masses
-  lands.forEach(function(d) {
-    var path = document.createElementNS(ns, 'path');
-    path.setAttribute('d', d);
-    path.setAttribute('fill', '#b8cfe8');
-    path.setAttribute('stroke', '#ffffff');
-    path.setAttribute('stroke-width', '0.6');
-    svg.appendChild(path);
-  });
-
-  // Tooltip element
-  var tip = document.createElement('div');
-  tip.style.cssText = 'position:absolute;background:rgba(15,23,42,0.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:12.5px;line-height:1.55;pointer-events:none;opacity:0;transition:opacity .15s;max-width:250px;z-index:10;white-space:normal;box-shadow:0 4px 16px rgba(0,0,0,.25);';
-  var container = document.getElementById('worldMap');
-  container.style.position = 'relative';
-  container.appendChild(tip);
-  container.appendChild(svg);
-
-  // Pins
-  pins.forEach(function(pin) {
-    var x = lonToX(pin.lon);
-    var y = latToY(pin.lat);
-
-    // Pulse ring
-    var pulse = document.createElementNS(ns, 'circle');
-    pulse.setAttribute('cx', x); pulse.setAttribute('cy', y); pulse.setAttribute('r', '9');
-    pulse.setAttribute('fill', 'none'); pulse.setAttribute('stroke', '#2563eb');
-    pulse.setAttribute('stroke-width', '1.5'); pulse.setAttribute('opacity', '0.35');
-    svg.appendChild(pulse);
-
-    // Dot
-    var dot = document.createElementNS(ns, 'circle');
-    dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('r', '5.5');
-    dot.setAttribute('fill', '#2563eb'); dot.setAttribute('stroke', '#ffffff');
-    dot.setAttribute('stroke-width', '1.5');
-    dot.style.cursor = 'pointer';
-    svg.appendChild(dot);
-
-    // Events
-    dot.addEventListener('mouseenter', function(e) {
-      tip.innerHTML = pin.label;
-      tip.style.opacity = '1';
-    });
-    dot.addEventListener('mousemove', function(e) {
-      var rect = container.getBoundingClientRect();
-      var tx = e.clientX - rect.left + 14;
-      var ty = e.clientY - rect.top - 14;
-      if (tx + 260 > container.offsetWidth) tx = e.clientX - rect.left - 264;
-      if (ty < 0) ty = 4;
-      tip.style.left = tx + 'px';
-      tip.style.top  = ty + 'px';
-    });
-    dot.addEventListener('mouseleave', function() {
-      tip.style.opacity = '0';
-    });
-    // Touch support
-    dot.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (tip.style.opacity === '1' && tip._pin === pin) {
-        tip.style.opacity = '0';
-        tip._pin = null;
-        return;
-      }
-      tip._pin = pin;
-      tip.innerHTML = pin.label;
-      tip.style.opacity = '1';
-      var rect = container.getBoundingClientRect();
-      var px = lonToX(pin.lon);
-      var py = latToY(pin.lat);
-      // Scale SVG coords to container pixels
-      var scaleX = container.offsetWidth / W;
-      var scaleY = container.offsetHeight / H;
-      var tx = px * scaleX + 14;
-      var ty = py * scaleY - 14;
-      // Clamp so tooltip stays inside container
-      if (tx + 260 > container.offsetWidth) tx = px * scaleX - 264;
-      if (tx < 4) tx = 4;
-      if (ty < 4) ty = 4;
-      tip.style.left = tx + 'px';
-      tip.style.top  = ty + 'px';
-    });
-  }); // end pins.forEach
-  // Close tooltip when clicking elsewhere
-  document.addEventListener('click', function() {
-    tip.style.opacity = '0';
-    tip._pin = null;
-  });
 })();
 </script>
 
