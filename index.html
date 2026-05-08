@@ -222,19 +222,19 @@
     </p>
     <div class="hero__stats" role="list" aria-label="Group statistics">
       <div role="listitem">
-        <div class="hero__stat-num" data-target="20">0</div>
+        <div class="hero__stat-num">20+</div>
         <div class="hero__stat-label">Active Members</div>
       </div>
       <div role="listitem">
-        <div class="hero__stat-num" data-target="13">0</div>
+        <div class="hero__stat-num">13+</div>
         <div class="hero__stat-label">Research Papers</div>
       </div>
       <div role="listitem">
-        <div class="hero__stat-num" data-target="8">0</div>
+        <div class="hero__stat-num">8+</div>
         <div class="hero__stat-label">Countries</div>
       </div>
       <div role="listitem">
-        <div class="hero__stat-num" data-target="6">0</div>
+        <div class="hero__stat-num">6+</div>
         <div class="hero__stat-label">Research Areas</div>
       </div>
     </div>
@@ -1209,33 +1209,7 @@ window.addEventListener('scroll', () => {
 goTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
 /* ── Stat counter animation ── */
-function animateCounter(el, target, suffix) {
-  if (el._counted) return;
-  el._counted = true;
-  let start = 0;
-  const dur = 1200;
-  const step = 16;
-  const inc = target / (dur / step);
-  const timer = setInterval(() => {
-    start += inc;
-    if (start >= target) { el.textContent = target + suffix; clearInterval(timer); }
-    else { el.textContent = Math.floor(start) + suffix; }
-  }, step);
-}
-function runCounters() {
-  document.querySelectorAll('.hero__stat-num[data-target]').forEach(el => {
-    animateCounter(el, parseInt(el.dataset.target), '+');
-  });
-}
-const statsObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { runCounters(); statsObs.disconnect(); }
-  });
-}, { threshold: 0, rootMargin: '0px' });
-const heroEl = document.querySelector('.hero');
-if (heroEl) { statsObs.observe(heroEl); }
-// Fallback: if hero already visible on load, run immediately
-setTimeout(function() { runCounters(); }, 300);
+/* stat counters removed — values hardcoded */
 
 /* ── Pub filter ── */
 document.querySelectorAll('.pub-filter__btn').forEach(btn => {
