@@ -6,6 +6,8 @@
   <title>NeuraSec Research Group</title>
   <meta name="description" content="NeuraSec Research Group — Advancing AI Security and Intelligent Systems." />
   <link rel="stylesheet" href="neurasec.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/sp38=" crossorigin="" defer></script>
   <style>
     /* ── Additional styles for new features ── */
 
@@ -981,7 +983,6 @@
 
 
 <!-- ══════════ WORLD MAP (Leaflet + OpenStreetMap) ══════════ -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <section class="section map-section" id="map-section" aria-labelledby="map-heading">
   <div class="container">
     <div class="section-header">
@@ -1342,7 +1343,6 @@
 
 
 <!-- ══════════ SCRIPTS ══════════ -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/sp38=" crossorigin=""></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -1444,8 +1444,11 @@ document.querySelectorAll('.join-tab').forEach(tab => {
     scrollWheelZoom: false  // prevent hijacking page scroll; user can enable with click
   });
 
+  // Force Leaflet to recalculate dimensions after layout settles
+  setTimeout(function() { map.invalidateSize(); }, 100);
+  setTimeout(function() { map.invalidateSize(); }, 400);
+
   // Enable scroll zoom on click inside map
-  map.once('focus', function() { map.scrollWheelZoom.enable(); });
   mapEl.addEventListener('click', function() { map.scrollWheelZoom.enable(); });
 
   // OpenStreetMap tile layer
