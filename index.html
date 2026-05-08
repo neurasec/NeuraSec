@@ -1210,6 +1210,8 @@ goTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: '
 
 /* ── Stat counter animation ── */
 function animateCounter(el, target, suffix) {
+  if (el._counted) return;
+  el._counted = true;
   let start = 0;
   const dur = 1200;
   const step = 16;
@@ -1220,19 +1222,20 @@ function animateCounter(el, target, suffix) {
     else { el.textContent = Math.floor(start) + suffix; }
   }, step);
 }
+function runCounters() {
+  document.querySelectorAll('.hero__stat-num[data-target]').forEach(el => {
+    animateCounter(el, parseInt(el.dataset.target), '+');
+  });
+}
 const statsObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
-      document.querySelectorAll('.hero__stat-num[data-target]').forEach(el => {
-        animateCounter(el, parseInt(el.dataset.target), '+');
-        delete el.dataset.target;
-      });
-      statsObs.disconnect();
-    }
+    if (e.isIntersecting) { runCounters(); statsObs.disconnect(); }
   });
-}, { threshold: 0.5 });
+}, { threshold: 0, rootMargin: '0px' });
 const heroEl = document.querySelector('.hero');
-if (heroEl) statsObs.observe(heroEl);
+if (heroEl) { statsObs.observe(heroEl); }
+// Fallback: if hero already visible on load, run immediately
+setTimeout(function() { runCounters(); }, 300);
 
 /* ── Pub filter ── */
 document.querySelectorAll('.pub-filter__btn').forEach(btn => {
