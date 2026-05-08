@@ -170,8 +170,6 @@
     }
     .expertise-tags .kw { font-size: .68rem; }
   </style>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLEg=" crossorigin=""></script>
 </head>
 <body>
 
@@ -959,7 +957,7 @@
       <p class="section-sub">NeuraSec spans 8+ countries across 4 continents — hover the pins to explore our global network.</p>
     </div>
 
-    <div id="worldMap" role="region" aria-label="World map showing NeuraSec member locations" style="height:420px;"></div>
+    <div id="worldMap" role="region" aria-label="World map showing NeuraSec member locations" style="position:relative;"></div>
 
 
     <div class="map-legend" aria-label="Map legend">
@@ -1281,53 +1279,181 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
   }
 })();
 
-/* ── World Map (Leaflet) ── */
+/* ── World Map (self-contained SVG — no external deps) ── */
 (function() {
-  function initMap() {
-    if (typeof L === 'undefined') { setTimeout(initMap, 200); return; }
-    var el = document.getElementById('worldMap');
-    if (!el || el._leaflet_id) return;
-    const map = L.map('worldMap', {
-      center: [20, 30],
-      zoom: 2,
-      zoomControl: true,
-      scrollWheelZoom: false,
-      attributionControl: true
+  var W = 960, H = 460;
+
+  // Natural Earth simplified paths — accurate country outlines
+  var lands = [
+    // North America mainland
+    "M167,75 L173,70 L182,68 L193,72 L204,74 L213,71 L220,74 L224,80 L219,86 L215,95 L218,104 L214,112 L208,118 L200,122 L194,130 L191,140 L186,148 L180,155 L174,158 L168,153 L162,145 L158,135 L155,124 L156,113 L160,103 L162,93 L163,83 Z",
+    // Greenland
+    "M220,28 L235,22 L250,24 L258,32 L255,42 L245,48 L232,46 L222,40 Z",
+    // Alaska
+    "M115,55 L128,52 L138,58 L135,66 L122,68 L112,63 Z",
+    // Central America
+    "M175,158 L183,155 L188,162 L184,170 L177,168 Z",
+    // Caribbean
+    "M210,140 L217,138 L218,143 L212,144 Z",
+    // South America
+    "M190,175 L202,168 L216,170 L228,178 L236,190 L240,205 L244,222 L246,240 L242,260 L234,278 L222,292 L210,298 L198,292 L190,278 L184,260 L183,240 L185,218 L186,198 Z",
+    // UK + Ireland
+    "M422,76 L428,72 L434,75 L432,82 L425,83 Z",
+    "M415,79 L419,76 L421,82 L417,84 Z",
+    // Scandinavia
+    "M452,48 L462,42 L472,44 L478,52 L474,62 L466,68 L458,66 L452,58 Z",
+    "M436,60 L444,56 L448,62 L446,70 L440,72 L436,66 Z",
+    // Iceland
+    "M390,50 L400,47 L406,52 L402,58 L393,57 Z",
+    // Europe mainland
+    "M428,82 L440,78 L452,76 L466,78 L480,80 L490,86 L496,94 L494,102 L486,108 L476,112 L464,110 L454,106 L446,100 L438,96 L430,92 Z",
+    // Iberian Peninsula
+    "M420,100 L432,96 L440,102 L438,114 L428,120 L418,116 L416,106 Z",
+    // Italy
+    "M455,100 L462,98 L468,104 L466,114 L462,122 L456,118 L454,108 Z",
+    // Balkans / Greece
+    "M470,100 L480,98 L486,106 L482,114 L474,116 L468,110 Z",
+    // Africa
+    "M430,128 L450,122 L470,120 L490,124 L508,132 L520,144 L526,160 L528,178 L524,196 L516,214 L504,230 L490,244 L474,252 L458,250 L444,240 L434,224 L428,206 L424,186 L422,164 L424,144 Z",
+    // Madagascar
+    "M516,230 L522,224 L526,232 L524,244 L518,248 L514,240 Z",
+    // Russia / Siberia
+    "M490,52 L520,46 L560,42 L600,40 L640,42 L680,46 L714,52 L730,60 L724,70 L700,76 L670,78 L640,76 L610,72 L580,68 L550,66 L520,66 L496,66 L488,60 Z",
+    // Kazakhstan / Central Asia
+    "M530,80 L570,76 L606,78 L620,86 L616,96 L600,100 L570,100 L544,96 L528,90 Z",
+    // Middle East
+    "M492,108 L514,104 L530,108 L540,118 L536,130 L522,136 L506,134 L494,126 L490,116 Z",
+    // Arabian Peninsula
+    "M510,130 L530,126 L546,132 L550,148 L542,162 L526,170 L510,164 L502,150 L504,136 Z",
+    // South Asia (India)
+    "M572,110 L592,106 L610,108 L622,118 L624,132 L618,148 L606,162 L592,170 L576,164 L566,150 L562,134 L564,120 Z",
+    // Sri Lanka
+    "M598,174 L604,170 L607,176 L602,180 Z",
+    // China / East Asia
+    "M620,72 L660,68 L698,70 L720,78 L728,90 L722,104 L706,114 L684,120 L660,120 L638,114 L622,104 L616,90 L618,78 Z",
+    // Korea
+    "M712,90 L720,86 L726,92 L722,100 L714,102 L710,96 Z",
+    // Japan
+    "M730,82 L740,78 L748,84 L744,94 L736,96 L728,90 Z",
+    "M724,98 L730,96 L733,103 L728,107 L722,104 Z",
+    // Southeast Asia mainland
+    "M650,120 L670,116 L688,120 L694,132 L686,144 L668,148 L650,142 L642,130 Z",
+    // Indochina peninsula
+    "M672,144 L686,140 L696,150 L692,164 L680,170 L668,164 L664,152 Z",
+    // Malay Peninsula
+    "M676,166 L684,162 L688,170 L684,180 L676,178 Z",
+    // Indonesia (Sumatra)
+    "M678,178 L700,172 L714,176 L716,186 L700,190 L680,188 Z",
+    // Indonesia (Java)
+    "M694,192 L714,188 L726,192 L726,198 L706,200 L694,198 Z",
+    // Indonesia (Borneo)
+    "M706,170 L726,166 L740,170 L744,182 L736,192 L716,194 L704,186 L702,174 Z",
+    // Philippines
+    "M718,140 L726,136 L732,142 L730,152 L720,156 L714,148 Z",
+    // Australia
+    "M686,248 L714,238 L744,236 L768,242 L784,254 L790,270 L786,288 L774,302 L754,312 L730,316 L706,310 L688,296 L678,278 L678,260 Z",
+    // New Zealand (North)
+    "M802,302 L810,296 L814,306 L808,314 L800,312 Z",
+    // New Zealand (South)
+    "M798,314 L808,310 L812,322 L806,334 L796,330 Z",
+    # Japan Hokkaido
+    "M736,74 L744,70 L750,76 L746,84 L738,84 Z",
+    # Taiwan
+    "M714,124 L718,120 L722,126 L718,132 L712,130 Z",
+  ]
+
+  var pins = [
+    { label: '<b>🇵🇰 Pakistan</b><br>Hassan Ahmed, Abdullah Khan, Abdul Mateen,<br>Arooj Fatima, Ridda Jameel, Kanwal Naz,<br>Ghalib Nadeem, Shahzad Tanveer, Aini Saba,<br>Zeshaan Ali, Saood Ahmed, Nimra Farooq, Qasim Ali', lat: 33.6, lon: 73.1 },
+    { label: '<b>🇦🇺 Australia</b><br>Dr. Shahrzad Saremi (Sunshine Coast)<br>Dr. Rania Shibl (Southern Cross Univ.)', lat: -25.3, lon: 133.8 },
+    { label: '<b>🇬🇧 United Kingdom</b><br>Dr. Imane Guellil (Univ. of Birmingham)', lat: 52.5, lon: -1.9 },
+    { label: '<b>🇸🇮 Slovenia</b><br>Dr. Tanja Pavleska (Jozef Stefan Institute)', lat: 46.1, lon: 14.8 },
+    { label: '<b>🇳🇴 Norway</b><br>Muhammad Yousaf (Simula Research Lab)', lat: 59.9, lon: 10.7 },
+    { label: '<b>🇨🇳 China</b><br>Ali Raza Kashif (HUST)<br>Hassan Khan (Tsinghua)', lat: 35.9, lon: 104.2 },
+    { label: '<b>🇹🇭 Thailand</b><br>Farasat Haider (Chulalongkorn Univ.)', lat: 13.7, lon: 100.5 },
+    { label: '<b>🇮🇩 Indonesia</b><br>Ike Devi Sulistyaningtyas<br>(Univ. Atma Jaya Yogyakarta)', lat: -7.8, lon: 110.4 },
+    { label: '<b>🇶🇦 Qatar</b><br>Sohaib Ahmed', lat: 25.3, lon: 51.2 },
+  ];
+
+  function lonToX(lon) { return (lon + 180) * (W / 360); }
+  function latToY(lat) { return (90 - lat) * (H / 180); }
+
+  // Build SVG
+  var ns = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  svg.setAttribute('xmlns', ns);
+  svg.style.cssText = 'width:100%;height:100%;display:block;border-radius:inherit;';
+
+  // Ocean background
+  var bg = document.createElementNS(ns, 'rect');
+  bg.setAttribute('width', W); bg.setAttribute('height', H);
+  bg.setAttribute('fill', '#d4e5f7');
+  svg.appendChild(bg);
+
+  // Land masses
+  lands.forEach(function(d) {
+    var path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('fill', '#b8cfe8');
+    path.setAttribute('stroke', '#ffffff');
+    path.setAttribute('stroke-width', '0.6');
+    svg.appendChild(path);
+  });
+
+  // Tooltip element
+  var tip = document.createElement('div');
+  tip.style.cssText = 'position:absolute;background:rgba(15,23,42,0.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:12.5px;line-height:1.55;pointer-events:none;opacity:0;transition:opacity .15s;max-width:230px;z-index:10;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.25);';
+  var container = document.getElementById('worldMap');
+  container.style.position = 'relative';
+  container.appendChild(tip);
+  container.appendChild(svg);
+
+  // Pins
+  pins.forEach(function(pin) {
+    var x = lonToX(pin.lon);
+    var y = latToY(pin.lat);
+
+    // Pulse ring
+    var pulse = document.createElementNS(ns, 'circle');
+    pulse.setAttribute('cx', x); pulse.setAttribute('cy', y); pulse.setAttribute('r', '9');
+    pulse.setAttribute('fill', 'none'); pulse.setAttribute('stroke', '#2563eb');
+    pulse.setAttribute('stroke-width', '1.5'); pulse.setAttribute('opacity', '0.35');
+    svg.appendChild(pulse);
+
+    // Dot
+    var dot = document.createElementNS(ns, 'circle');
+    dot.setAttribute('cx', x); dot.setAttribute('cy', y); dot.setAttribute('r', '5.5');
+    dot.setAttribute('fill', '#2563eb'); dot.setAttribute('stroke', '#ffffff');
+    dot.setAttribute('stroke-width', '1.5');
+    dot.style.cursor = 'pointer';
+    svg.appendChild(dot);
+
+    // Events
+    dot.addEventListener('mouseenter', function(e) {
+      tip.innerHTML = pin.label;
+      tip.style.opacity = '1';
     });
-
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19
-    }).addTo(map);
-
-    const pins = [
-      { label: '<strong>🇵🇰 Pakistan</strong><br>Hassan Ahmed, Abdullah Khan, Abdul Mateen,<br>Arooj Fatima, Ridda Jameel, Kanwal Naz,<br>Ghalib Nadeem, Shahzad Tanveer, Aini Saba,<br>Zeshaan Ali, Saood Ahmed, Nimra Farooq, Qasim Ali', lat: 33.6, lon: 73.1 },
-      { label: '<strong>🇦🇺 Australia</strong><br>Dr. Shahrzad Saremi (Sunshine Coast)<br>Dr. Rania Shibl (Southern Cross Univ.)', lat: -25.3, lon: 133.8 },
-      { label: '<strong>🇬🇧 United Kingdom</strong><br>Dr. Imane Guellil (Univ. of Birmingham)', lat: 52.5, lon: -1.9 },
-      { label: '<strong>🇸🇮 Slovenia</strong><br>Dr. Tanja Pavleska (Jozef Stefan Institute)', lat: 46.1, lon: 14.8 },
-      { label: '<strong>🇳🇴 Norway</strong><br>Muhammad Yousaf (Simula Research Lab)', lat: 59.9, lon: 10.7 },
-      { label: '<strong>🇨🇳 China</strong><br>Ali Raza Kashif (HUST)<br>Hassan Khan (Tsinghua)', lat: 35.9, lon: 104.2 },
-      { label: '<strong>🇹🇭 Thailand</strong><br>Farasat Haider (Chulalongkorn Univ.)', lat: 13.7, lon: 100.5 },
-      { label: '<strong>🇮🇩 Indonesia</strong><br>Ike Devi Sulistyaningtyas<br>(Univ. Atma Jaya Yogyakarta)', lat: -7.8, lon: 110.4 },
-      { label: '<strong>🇶🇦 Qatar</strong><br>Sohaib Ahmed', lat: 25.3, lon: 51.2 },
-    ];
-
-    const dotIcon = L.divIcon({
-      className: '',
-      html: '<div style="width:14px;height:14px;background:var(--accent,#2563eb);border:2px solid white;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.35);"></div>',
-      iconSize: [14, 14],
-      iconAnchor: [7, 7],
-      popupAnchor: [0, -10]
+    dot.addEventListener('mousemove', function(e) {
+      var rect = container.getBoundingClientRect();
+      var tx = e.clientX - rect.left + 14;
+      var ty = e.clientY - rect.top - 14;
+      if (tx + 240 > container.offsetWidth) tx = e.clientX - rect.left - 244;
+      if (ty < 0) ty = 4;
+      tip.style.left = tx + 'px';
+      tip.style.top  = ty + 'px';
     });
-
-    pins.forEach(pin => {
-      L.marker([pin.lat, pin.lon], { icon: dotIcon })
-        .addTo(map)
-        .bindPopup(pin.label, { maxWidth: 240 });
+    dot.addEventListener('mouseleave', function() {
+      tip.style.opacity = '0';
     });
-  }
-  initMap();
+    // Touch support
+    dot.addEventListener('click', function(e) {
+      tip.innerHTML = pin.label;
+      tip.style.opacity = tip.style.opacity === '1' ? '0' : '1';
+      var rect = container.getBoundingClientRect();
+      tip.style.left = (lonToX(pin.lon) + 14) + 'px';
+      tip.style.top  = (latToY(pin.lat) - 14) + 'px';
+    });
+  });
 })();
 </script>
 
