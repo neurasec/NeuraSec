@@ -81,11 +81,13 @@
     #worldMap {
       width: 100%;
       height: 420px;
+      min-height: 260px;
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       background: #eef2f8;
       position: relative;
       z-index: 0;
+      overflow: hidden;
     }
 
     .map-country { fill: #c8d6e8; stroke: white; stroke-width: .4; transition: fill .2s; }
@@ -567,7 +569,7 @@
           <div class="member-card__inst">Department of Computer Science, University of Wah, Wah Cantt, Pakistan</div>
           <div class="member-card__expertise">Cybersecurity · Deep Learning · NLP · Applications of AI</div>
           <div class="expertise-tags">
-		    <span class="kw">MS Computer Science</span>
+            <span class="kw">MS Computer Science</span>
             <span class="kw">Researcher</span>
             <span class="kw">University of Wah</span>
           </div>
@@ -1223,7 +1225,13 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
     btn.classList.add('active');
     const filter = btn.dataset.filter;
     document.querySelectorAll('.pub-item').forEach(item => {
-      item.style.display = (filter === 'all' || item.dataset.status === filter) ? '' : 'none';
+      const match = filter === 'all' || item.dataset.status === filter;
+      item.style.display = match ? '' : 'none';
+      if (match) {
+        item.style.animation = 'none';
+        item.offsetHeight; // reflow
+        item.style.animation = '';
+      }
     });
   });
 });
@@ -1336,9 +1344,9 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
     "M802,302 L810,296 L814,306 L808,314 L800,312 Z",
     // New Zealand (South)
     "M798,314 L808,310 L812,322 L806,334 L796,330 Z",
-    # Japan Hokkaido
+    // Japan Hokkaido
     "M736,74 L744,70 L750,76 L746,84 L738,84 Z",
-    # Taiwan
+    // Taiwan
     "M714,124 L718,120 L722,126 L718,132 L712,130 Z",
   ]
 
@@ -1382,7 +1390,7 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
 
   // Tooltip element
   var tip = document.createElement('div');
-  tip.style.cssText = 'position:absolute;background:rgba(15,23,42,0.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:12.5px;line-height:1.55;pointer-events:none;opacity:0;transition:opacity .15s;max-width:230px;z-index:10;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.25);';
+  tip.style.cssText = 'position:absolute;background:rgba(15,23,42,0.92);color:#fff;padding:8px 12px;border-radius:8px;font-size:12.5px;line-height:1.55;pointer-events:none;opacity:0;transition:opacity .15s;max-width:250px;z-index:10;white-space:normal;box-shadow:0 4px 16px rgba(0,0,0,.25);';
   var container = document.getElementById('worldMap');
   container.style.position = 'relative';
   container.appendChild(tip);
@@ -1417,7 +1425,7 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
       var rect = container.getBoundingClientRect();
       var tx = e.clientX - rect.left + 14;
       var ty = e.clientY - rect.top - 14;
-      if (tx + 240 > container.offsetWidth) tx = e.clientX - rect.left - 244;
+      if (tx + 260 > container.offsetWidth) tx = e.clientX - rect.left - 264;
       if (ty < 0) ty = 4;
       tip.style.left = tx + 'px';
       tip.style.top  = ty + 'px';
@@ -1427,12 +1435,35 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
     });
     // Touch support
     dot.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (tip.style.opacity === '1' && tip._pin === pin) {
+        tip.style.opacity = '0';
+        tip._pin = null;
+        return;
+      }
+      tip._pin = pin;
       tip.innerHTML = pin.label;
-      tip.style.opacity = tip.style.opacity === '1' ? '0' : '1';
+      tip.style.opacity = '1';
       var rect = container.getBoundingClientRect();
-      tip.style.left = (lonToX(pin.lon) + 14) + 'px';
-      tip.style.top  = (latToY(pin.lat) - 14) + 'px';
+      var px = lonToX(pin.lon);
+      var py = latToY(pin.lat);
+      // Scale SVG coords to container pixels
+      var scaleX = container.offsetWidth / W;
+      var scaleY = container.offsetHeight / H;
+      var tx = px * scaleX + 14;
+      var ty = py * scaleY - 14;
+      // Clamp so tooltip stays inside container
+      if (tx + 260 > container.offsetWidth) tx = px * scaleX - 264;
+      if (tx < 4) tx = 4;
+      if (ty < 4) ty = 4;
+      tip.style.left = tx + 'px';
+      tip.style.top  = ty + 'px';
     });
+  }); // end pins.forEach
+  // Close tooltip when clicking elsewhere
+  document.addEventListener('click', function() {
+    tip.style.opacity = '0';
+    tip._pin = null;
   });
 })();
 </script>
