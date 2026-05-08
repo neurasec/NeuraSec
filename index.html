@@ -206,6 +206,7 @@
       <li><a href="#publications">Publications</a></li>
       <li><a href="#team">Team</a></li>
       <li><a href="#map-section">Global Reach</a></li>
+      <li><a href="#tools">Tools</a></li>
       <li><a href="#news">News</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -961,10 +962,10 @@
       <p class="section-sub">NeuraSec spans 8+ countries across 4 continents — hover the pins to explore our global network.</p>
     </div>
 
-    <div id="worldMap" role="img" aria-label="World map showing NeuraSec member locations">
-      <div class="map-tooltip" id="mapTooltip"></div>
-      <!-- SVG world map rendered by JS -->
-    </div>
+    <div id="worldMap" role="region" aria-label="World map showing NeuraSec member locations" style="height:420px;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);"></div>
+    <!-- Leaflet CSS/JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLEg=" crossorigin=""></script>
 
     <div class="map-legend" aria-label="Map legend">
       <div class="map-legend-item"><div class="map-legend-dot"></div> Member / Institution location</div>
@@ -1097,6 +1098,37 @@
   </div>
 </section>
 
+
+
+<!-- ══════════ TOOLS ══════════ -->
+<section class="section section--alt" id="tools" aria-labelledby="tools-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Open Source</span>
+      <h2 class="section-title" id="tools-heading">Tools</h2>
+      <p class="section-sub">Research utilities built by NeuraSec to accelerate scholarly workflows.</p>
+    </div>
+    <div class="partners-grid" role="list">
+
+      <div class="partner-card" role="listitem" style="border-left:3px solid var(--accent); gap:.55rem;">
+        <div style="display:flex;align-items:center;gap:.6rem;">
+          <span style="font-size:1.35rem;" aria-hidden="true">📄</span>
+          <div class="partner-card__name" style="font-size:1rem;">AuthentiCite</div>
+        </div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--accent-mid);">References → BibTeX</div>
+        <p style="font-size:.8rem;color:var(--text-muted);line-height:1.55;margin:0;">
+          Paste any citation format. Smart preprocessing routes each reference through DOI fast-path,
+          multi-strategy API search, and LLM structural fallback — with AI hallucination detection.
+        </p>
+        <a href="https://hassanahmed1166.github.io/ref-to-bibtex/" target="_blank" rel="noopener"
+           class="partner-card__link" style="margin-top:.3rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:.3rem;">
+          Launch Tool <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <!-- ══════════ CONTACT ══════════ -->
 <section class="section section--alt" id="contact" aria-labelledby="contact-heading">
@@ -1254,104 +1286,51 @@ document.querySelectorAll('.pub-filter__btn').forEach(btn => {
   }
 })();
 
-/* ── World Map ── */
+/* ── World Map (Leaflet) ── */
 (function() {
-  const mapDiv = document.getElementById('worldMap');
-  const tooltip = document.getElementById('mapTooltip');
-
-  // Member pin data [label, lat, lon, members]
-  const pins = [
-    { label: '🇵🇰 Pakistan\nHassan Ahmed, Abdullah Khan, Abdul Mateen,\nArooj Fatima, Ridda Jameel, Kanwal Naz,\nGhalib Nadeem, Shahzad Tanveer, Aini Saba,\nZeshaan Ali, Saood Ahmed, Nimra Farooq, Qasim Ali', lat: 33.6, lon: 73.1 },
-    { label: '🇦🇺 Australia\nDr. Shahrzad Saremi (Sunshine Coast)\nDr. Rania Shibl (Southern Cross Univ.)', lat: -25.3, lon: 133.8 },
-    { label: '🇬🇧 United Kingdom\nDr. Imane Guellil (Univ. of Birmingham)', lat: 52.5, lon: -1.9 },
-    { label: '🇸🇮 Slovenia\nDr. Tanja Pavleska (Jozef Stefan Institute)', lat: 46.1, lon: 14.8 },
-    { label: '🇳🇴 Norway\nMuhammad Yousaf (Simula Research Lab)', lat: 59.9, lon: 10.7 },
-    { label: '🇨🇳 China\nAli Raza Kashif (HUST)\nHassan Khan (Tsinghua)', lat: 35.9, lon: 104.2 },
-    { label: '🇹🇭 Thailand\nFarasat Haider (Chulalongkorn Univ.)', lat: 13.7, lon: 100.5 },
-    { label: '🇮🇩 Indonesia\nIke Devi Sulistyaningtyas\n(Univ. Atma Jaya Yogyakarta)', lat: -7.8, lon: 110.4 },
-    { label: '🇶🇦 Qatar\nSohaib Ahmed', lat: 25.3, lon: 51.2 },
-  ];
-
-  // Simple equirectangular projection
-  const W = 960, H = 480;
-  function lonToX(lon) { return (lon + 180) * (W / 360); }
-  function latToY(lat) { return (90 - lat) * (H / 180); }
-
-  // Minimal SVG world paths (simplified polygons for key landmasses)
-  // Using a hand-crafted simplified world outline
-  const landPaths = [
-    // North America
-    "M 95,85 L 140,70 L 185,75 L 195,110 L 190,140 L 170,155 L 155,165 L 145,175 L 130,180 L 120,175 L 100,155 L 90,130 L 85,110 Z",
-    // Central America
-    "M 150,175 L 165,175 L 170,185 L 160,190 L 150,185 Z",
-    // Greenland
-    "M 195,40 L 230,35 L 240,55 L 225,70 L 205,65 Z",
-    // South America
-    "M 185,195 L 215,185 L 240,195 L 250,220 L 255,255 L 245,285 L 230,300 L 215,295 L 200,270 L 185,240 L 180,215 Z",
-    // Europe
-    "M 430,70 L 480,65 L 510,75 L 505,95 L 490,105 L 470,110 L 450,105 L 435,95 Z",
-    // Scandinavia
-    "M 465,50 L 490,45 L 500,65 L 480,70 L 465,65 Z",
-    // UK/Ireland
-    "M 430,78 L 440,72 L 445,82 L 437,87 Z",
-    // Africa
-    "M 450,130 L 505,120 L 525,140 L 530,175 L 525,210 L 510,240 L 490,255 L 470,250 L 455,225 L 445,190 L 442,155 Z",
-    // Russia/Central Asia
-    "M 510,55 L 650,50 L 720,65 L 730,90 L 680,100 L 620,95 L 560,85 L 510,80 Z",
-    // Middle East
-    "M 510,115 L 555,110 L 570,125 L 565,145 L 545,150 L 515,140 Z",
-    // South Asia
-    "M 580,115 L 625,110 L 645,130 L 640,160 L 620,175 L 600,165 L 580,145 Z",
-    // China/East Asia
-    "M 645,90 L 710,85 L 740,100 L 745,130 L 720,145 L 685,140 L 650,125 L 640,105 Z",
-    // Southeast Asia
-    "M 680,155 L 720,148 L 735,165 L 725,180 L 700,178 L 680,168 Z",
-    // Indonesia (approx)
-    "M 690,195 L 730,190 L 755,195 L 760,210 L 730,215 L 695,210 Z",
-    // Japan/Korea
-    "M 735,95 L 755,90 L 760,105 L 748,112 L 735,107 Z",
-    // Australia
-    "M 680,250 L 745,240 L 775,255 L 780,285 L 760,305 L 725,310 L 695,295 L 675,270 Z",
-    // New Zealand
-    "M 790,305 L 800,298 L 805,312 L 798,320 L 788,315 Z",
-  ];
-
-  let svgHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block">
-    <rect width="${W}" height="${H}" fill="#dce8f3"/>
-    ${landPaths.map(d => `<path d="${d}" class="map-country"/>`).join('\n    ')}`;
-
-  // Add pins
-  pins.forEach((pin, i) => {
-    const x = lonToX(pin.lon);
-    const y = latToY(pin.lat);
-    svgHTML += `\n    <circle class="map-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" data-index="${i}"/>`;
-  });
-
-  svgHTML += `\n  </svg>`;
-  mapDiv.insertAdjacentHTML('afterbegin', svgHTML);
-
-  // Tooltip interaction
-  mapDiv.querySelectorAll('.map-dot').forEach(dot => {
-    const pin = pins[parseInt(dot.dataset.index)];
-
-    dot.addEventListener('mouseenter', e => {
-      tooltip.innerHTML = pin.label.replace(/\n/g, '<br>');
-      tooltip.style.opacity = '1';
+  function initMap() {
+    if (typeof L === 'undefined') { setTimeout(initMap, 100); return; }
+    const map = L.map('worldMap', {
+      center: [20, 30],
+      zoom: 2,
+      zoomControl: true,
+      scrollWheelZoom: false,
+      attributionControl: true
     });
 
-    dot.addEventListener('mousemove', e => {
-      const rect = mapDiv.getBoundingClientRect();
-      let x = e.clientX - rect.left + 12;
-      let y = e.clientY - rect.top - 10;
-      if (x + 200 > mapDiv.offsetWidth) x = e.clientX - rect.left - tooltip.offsetWidth - 12;
-      tooltip.style.left = x + 'px';
-      tooltip.style.top  = y + 'px';
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    const pins = [
+      { label: '<strong>🇵🇰 Pakistan</strong><br>Hassan Ahmed, Abdullah Khan, Abdul Mateen,<br>Arooj Fatima, Ridda Jameel, Kanwal Naz,<br>Ghalib Nadeem, Shahzad Tanveer, Aini Saba,<br>Zeshaan Ali, Saood Ahmed, Nimra Farooq, Qasim Ali', lat: 33.6, lon: 73.1 },
+      { label: '<strong>🇦🇺 Australia</strong><br>Dr. Shahrzad Saremi (Sunshine Coast)<br>Dr. Rania Shibl (Southern Cross Univ.)', lat: -25.3, lon: 133.8 },
+      { label: '<strong>🇬🇧 United Kingdom</strong><br>Dr. Imane Guellil (Univ. of Birmingham)', lat: 52.5, lon: -1.9 },
+      { label: '<strong>🇸🇮 Slovenia</strong><br>Dr. Tanja Pavleska (Jozef Stefan Institute)', lat: 46.1, lon: 14.8 },
+      { label: '<strong>🇳🇴 Norway</strong><br>Muhammad Yousaf (Simula Research Lab)', lat: 59.9, lon: 10.7 },
+      { label: '<strong>🇨🇳 China</strong><br>Ali Raza Kashif (HUST)<br>Hassan Khan (Tsinghua)', lat: 35.9, lon: 104.2 },
+      { label: '<strong>🇹🇭 Thailand</strong><br>Farasat Haider (Chulalongkorn Univ.)', lat: 13.7, lon: 100.5 },
+      { label: '<strong>🇮🇩 Indonesia</strong><br>Ike Devi Sulistyaningtyas<br>(Univ. Atma Jaya Yogyakarta)', lat: -7.8, lon: 110.4 },
+      { label: '<strong>🇶🇦 Qatar</strong><br>Sohaib Ahmed', lat: 25.3, lon: 51.2 },
+    ];
+
+    const dotIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:14px;height:14px;background:var(--accent,#2563eb);border:2px solid white;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.35);"></div>',
+      iconSize: [14, 14],
+      iconAnchor: [7, 7],
+      popupAnchor: [0, -10]
     });
 
-    dot.addEventListener('mouseleave', () => {
-      tooltip.style.opacity = '0';
+    pins.forEach(pin => {
+      L.marker([pin.lat, pin.lon], { icon: dotIcon })
+        .addTo(map)
+        .bindPopup(pin.label, { maxWidth: 240 });
     });
-  });
+  }
+  initMap();
 })();
 </script>
 
