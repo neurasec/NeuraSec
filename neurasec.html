@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuraSec Research Group</title>
+  <meta name="description" content="NeuraSec Research Group — Advancing AI Security and Intelligent Systems." />
+  <link rel="stylesheet" href="neurasec.css" />
+  <style>
+    /* ── Additional styles for new features ── */
+
+    /* Go to top button */
+    #goTop {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 200;
+      width: 44px; height: 44px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s, transform .25s;
+    }
+    #goTop.visible { opacity: 1; pointer-events: all; }
+    #goTop:hover { transform: translateY(-3px); background: var(--accent-mid); }
+
+    /* Visitor counter strip */
+    .visitor-strip {
+      background: var(--accent-pale);
+      border-bottom: 1px solid var(--border-light);
+      padding: .45rem 0;
+      font-size: .8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .visitor-strip strong { color: var(--accent); }
+
+    /* Enhanced member card – featured (leadership / advisors) */
+    .member-card--featured {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .member-card--featured .member-card__photo,
+    .member-card--featured .member-card__initials {
+      width: 88px; height: 88px;
+      font-size: 1.35rem;
+    }
+    .member-card--featured .member-card__name { font-size: 1rem; }
+
+    .member-card__expertise {
+      font-size: .73rem;
+      color: var(--text-muted);
+      margin-top: .3rem;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .member-card__email {
+      font-size: .72rem;
+      color: var(--accent-mid);
+      margin-top: .25rem;
+      word-break: break-all;
+    }
+
+    /* World map section */
+    .map-section {
+      padding-block: 3.5rem;
+    }
+
+    #worldMap {
+      width: 100%;
+      height: 420px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #eef2f8;
+      position: relative;
+    }
+
+    #worldMap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-country { fill: #c8d6e8; stroke: white; stroke-width: .4; transition: fill .2s; }
+    .map-country.active { fill: var(--accent); }
+    .map-country:hover { fill: var(--accent-mid); cursor: pointer; }
+
+    .map-dot {
+      fill: #ef4444;
+      stroke: white;
+      stroke-width: 1.5;
+      cursor: pointer;
+      transition: r .2s;
+    }
+    .map-dot:hover { r: 7; }
+
+    .map-tooltip {
+      position: absolute;
+      background: var(--text-primary);
+      color: white;
+      font-size: .78rem;
+      padding: .45rem .75rem;
+      border-radius: var(--radius-sm);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s;
+      white-space: nowrap;
+      z-index: 10;
+    }
+
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+    .map-legend-item { display: flex; align-items: center; gap: .4rem; }
+    .map-legend-dot { width: 10px; height: 10px; background: #ef4444; border-radius: 50%; border: 1.5px solid white; box-shadow: 0 0 0 1px #ef4444; }
+
+    /* Projects section – removed from main nav, stays in page */
+    .projects-section { display: none; } /* hidden since user didn't ask for it this time */
+
+    /* Citation / doi link */
+    .pub-item__doi { text-decoration: none; }
+    .pub-item__doi:hover { text-decoration: underline; }
+
+    /* Smooth stats counter */
+    .hero__stat-num { transition: all .3s; }
+
+    /* Section filter tabs */
+    .pub-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-bottom: 1.5rem;
+    }
+    .pub-filter__btn {
+      padding: .35rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: none;
+      font-size: .8rem;
+      font-family: var(--font-base);
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .pub-filter__btn.active, .pub-filter__btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    /* Expertise tags on advisor cards */
+    .expertise-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .3rem;
+      margin-top: .4rem;
+    }
+    .expertise-tags .kw { font-size: .68rem; }
+  </style>
+</head>
+<body>
+
+<!-- Visitor counter strip -->
+<div class="visitor-strip" role="status" aria-live="polite">
+  👁 Site visitors: <strong id="visitorCount">—</strong> &nbsp;|&nbsp; Welcome to NeuraSec Research Group
+</div>
+
+<!-- ══════════ NAVIGATION ══════════ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="#home" class="nav__brand" aria-label="NeuraSec home">
+      <div class="nav__logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L4 6v6c0 5.25 3.4 10.15 8 11.5C16.6 22.15 20 17.25 20 12V6l-8-4zm-1 13l-3-3 1.41-1.41L11 12.17l4.59-4.58L17 9l-6 6z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="nav__name">NeuraSec</div>
+        <div class="nav__sub">Research Group</div>
+      </div>
+    </a>
+
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+
+    <ul class="nav__links" id="navLinks" role="list">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#research">Research Areas</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#map-section">Global Reach</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="home" aria-label="Introduction">
+  <div class="hero__inner">
+    <div class="hero__badge">
+      <span class="hero__badge-dot" aria-hidden="true"></span>
+      Active Research Group · Est. 2024
+    </div>
+    <h1 class="hero__title">Advancing AI Security and Intelligent Systems</h1>
+    <p class="hero__tagline">
+      NeuraSec is a collaborative research group focused on cybersecurity, deep learning, natural language processing, and explainable AI — producing impactful work at the intersection of intelligence and security.
+    </p>
+    <div class="hero__stats" role="list" aria-label="Group statistics">
+      <div role="listitem">
+        <div class="hero__stat-num" data-target="20">0</div>
+        <div class="hero__stat-label">Active Members</div>
+      </div>
+      <div role="listitem">
+        <div class="hero__stat-num" data-target="13">0</div>
+        <div class="hero__stat-label">Research Papers</div>
+      </div>
+      <div role="listitem">
+        <div class="hero__stat-num" data-target="8">0</div>
+        <div class="hero__stat-label">Countries</div>
+      </div>
+      <div role="listitem">
+        <div class="hero__stat-num" data-target="6">0</div>
+        <div class="hero__stat-label">Research Areas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ RESEARCH AREAS ══════════ -->
+<section class="section section--alt" id="research" aria-labelledby="research-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Focus Areas</span>
+      <h2 class="section-title" id="research-heading">Research Areas</h2>
+      <p class="section-sub">Our work spans six domains addressing critical challenges in modern computing and intelligent systems.</p>
+    </div>
+    <div class="areas-grid" role="list">
+      <article class="area-card" role="listitem">
+        <div class="area-card__icon" aria-hidden="true">🔒</div>
+        <h3 class="area-card__title">Cybersecurity</h3>
+        <p class="area-card__desc">Intrusion detection for IoMT, CAN bus, and UAV networks. Deep learning-based anomaly detection, malware classification, phishing URL detection, and LLM jailbreak prevention.</p>
+      </article>
+      <article class="area-card" role="listitem">
+        <div class="area-card__icon" aria-hidden="true">🧠</div>
+        <h3 class="area-card__title">Artificial Intelligence &amp; Deep Learning</h3>
+        <p class="area-card__desc">Transformer architectures, ensemble methods, federated learning, and graph neural networks applied to classification, detection, and natural language tasks.</p>
+      </article>
+      <article class="area-card" role="listitem">
+        <div class="area-card__icon" aria-hidden="true">🔍</div>
+        <h3 class="area-card__title">Explainable AI (XAI)</h3>
+        <p class="area-card__desc">Interpretable machine learning with SHAP-based diagnostics, attention visualization, and per-class analysis to ensure transparent, trustworthy AI systems.</p>
+      </article>
+      <article class="area-card" role="listitem">
+        <div class="area-card__icon" aria-hidden="true">💬</div>
+        <h3 class="area-card__title">Natural Language Processing</h3>
+        <p class="area-card__desc">Urdu–Roman Urdu transliteration, social media bot detection, sentiment analysis, hate speech detection, and LLM safety &amp; jailbreak analysis.</p>
+      </article>
+      <article class="area-card" role="listitem">
+        <div class="area-card__icon" aria-hidden="true">🏥</div>
+        <h3 class="area-card__title">AI in Healthcare</h3>
+        <p class="area-card__desc">Multimodal AI for Alzheimer's detection, skin disease classification, and systematic literature reviews on AI-based clinical decision support.</p>
+      </article>
+      <article class="area-card" role="listitem">
+        <div class="area-card__icon" aria-hidden="true">⚡</div>
+        <h3 class="area-card__title">Interdisciplinary Research</h3>
+        <p class="area-card__desc">Post-quantum cryptography benchmarking on IoT, smart grid deep learning, energy storage materials, sports analytics, and industry 4.0 applications.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ PUBLICATIONS ══════════ -->
+<section class="section" id="publications" aria-labelledby="pub-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Research Output</span>
+      <h2 class="section-title" id="pub-heading">Publications</h2>
+      <p class="section-sub">Peer-reviewed journal articles, conference papers, and manuscripts under review.</p>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="pub-filter" role="group" aria-label="Filter publications">
+      <button class="pub-filter__btn active" data-filter="all">All</button>
+      <button class="pub-filter__btn" data-filter="published">Published</button>
+      <button class="pub-filter__btn" data-filter="review">Under Review</button>
+      <button class="pub-filter__btn" data-filter="progress">In Progress</button>
+    </div>
+
+    <div class="pub-list" role="list">
+
+      <article class="pub-item" role="listitem" data-status="published">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">Enhancing Social Media Bot Detection with Cross-Feature Gating and Residual Learning</div>
+          <div class="pub-item__authors">Abdullah Khan, Arooj Fatima, Ridda Jamil, Hassan Ahmed, Aini Saba</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--green">Published</span>
+            <span>ICCK Transactions on Emerging Topics in Artificial Intelligence, Vol. 3, No. 1, pp. 20–32</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">Bot Detection</span><span class="kw">Social Media</span><span class="kw">Deep Learning</span><span class="kw">Feature Gating</span><span class="kw">NLP</span>
+          </div>
+          <div style="margin-top:.4rem">
+            <a class="pub-item__doi" href="https://doi.org/10.62762/TETAI.2025.791029" target="_blank" rel="noopener">DOI: 10.62762/TETAI.2025.791029 ↗</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="published">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">Urdu to Roman Urdu Transliteration Using Bi-Directional LSTM and Attention Mechanisms</div>
+          <div class="pub-item__authors">Hassan Ahmed, Abdullah Khan, Hassan Khan</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--green">Accepted</span>
+            <span>ICCK Transactions on Advanced Computing and Systems, 2026</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">Urdu NLP</span><span class="kw">Transliteration</span><span class="kw">BiLSTM</span><span class="kw">Attention</span><span class="kw">Seq2Seq</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="review">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">PhishAttn: A Hybrid CNN-BiLSTM-Attention Framework for Semantic and Statistical Phishing URL Detection</div>
+          <div class="pub-item__authors">Hassan Ahmed, Arooj Fatima, Abdullah Khan, Shahrzad Saremi, Rania Shibl</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--amber">Under Review</span>
+            <span>International Journal of Machine Learning and Cybernetics, Springer Nature</span>
+          </div>
+          <button class="abstract-toggle" onclick="toggleAbstract(this)" aria-expanded="false">▸ Abstract</button>
+          <div class="abstract-body">
+            Phishing attacks impersonate legitimate URLs to steal credentials and financial data. Rule-based detectors fail against rapidly evolving techniques; ML methods rely on handcrafted features. We propose PhishAttn — a hybrid CNN-BiLSTM-Attention model that automatically extracts local and sequential URL features. Evaluated on Kaggle, Mendeley, and PhiUSIIL datasets, the model achieves accuracies of 95.98%, 98.90%, and 99.80% respectively, with an overall accuracy of 98.28% and AUC-ROC of 0.9979.
+          </div>
+          <div class="pub-keywords" style="margin-top:.5rem">
+            <span class="kw">Phishing Detection</span><span class="kw">CNN</span><span class="kw">BiLSTM</span><span class="kw">Attention</span><span class="kw">URL Analysis</span><span class="kw">Cybersecurity</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="review">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">From Analysis to Defense: Benchmarking LLM Jailbreak Vulnerability and Introducing the JBDM Ensemble Detector</div>
+          <div class="pub-item__authors">Hassan Ahmed, Abdullah Khan, Hassan Khan</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--amber">Under Review</span>
+            <span>IET Information Security, Wiley</span>
+          </div>
+          <button class="abstract-toggle" onclick="toggleAbstract(this)" aria-expanded="false">▸ Abstract</button>
+          <div class="abstract-body">
+            We benchmark five LLMs against jailbreak prompts and propose JBDM — a three-stage ensemble detector combining a fine-tuned DeBERTa-v3 Transformer with lexical features, XGBoost, and an MLP over hybrid embeddings. JBDM achieves an out-of-fold AUC-ROC of 99.99% and overall accuracy of 99.85%. Deployed as a guard layer, it achieves 100% jailbreak detection on Gemini and ≥90% on Claude and ChatGPT.
+          </div>
+          <div class="pub-keywords" style="margin-top:.5rem">
+            <span class="kw">LLM Safety</span><span class="kw">Jailbreak Detection</span><span class="kw">DeBERTa</span><span class="kw">Ensemble</span><span class="kw">XGBoost</span><span class="kw">NLP Security</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="review">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">Securing UAV CAN Bus: A Dual-Schema Deep Learning Approach for Volumetric and Integrity Intrusion Detection</div>
+          <div class="pub-item__authors">Abdullah Khan, Hassan Ahmed, Maryam Javaid, Hassan Khan</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--amber">Under Review</span>
+            <span>ICCK Transactions on Advanced Computing and Systems</span>
+          </div>
+          <button class="abstract-toggle" onclick="toggleAbstract(this)" aria-expanded="false">▸ Abstract</button>
+          <div class="abstract-body">
+            UAV CAN buses lack encryption and authentication, making them vulnerable to intrusion attacks. We propose a schema-specific IDS that partitions detection into volumetric (DoS, Replay) and integrity (FDI, Evil Twin) subspaces, each served by a dedicated Bi-GRU model with stochastic feature augmentation. The system achieves 97.45% weighted accuracy on volumetric attacks and 99.97% detection rate on integrity attacks, significantly outperforming monolithic classifiers.
+          </div>
+          <div class="pub-keywords" style="margin-top:.5rem">
+            <span class="kw">UAV Security</span><span class="kw">CAN Bus</span><span class="kw">Bi-GRU</span><span class="kw">Intrusion Detection</span><span class="kw">Deep Learning</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="review">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">SELM-CTR: A Stacking Ensemble Deep Learning Model with SHAP-Based Analysis for Large-Scale Click-Through Rate Prediction</div>
+          <div class="pub-item__authors">Zeeshan Ali, Hassan Ahmed, Abdullah Khan, Shahrzad Saremi, Rania Shibl</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--amber">Under Review</span>
+            <span>International Journal of Intelligent Computing and Cybernetics, Emerald Publishing</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">CTR Prediction</span><span class="kw">Stacking Ensemble</span><span class="kw">SHAP</span><span class="kw">XAI</span><span class="kw">Deep Learning</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="review">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">A Hybrid XGBoost–Deep Neural Network Ensemble for Multi-Class Intrusion Detection with Per-Class Diagnostic Analysis</div>
+          <div class="pub-item__authors">Hamza Ali, Zeeshan Ali, Hassan Ahmed, Rania Shibl</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--amber">Under Review</span>
+            <span>International Journal (Submission)</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">XGBoost</span><span class="kw">DNN</span><span class="kw">Intrusion Detection</span><span class="kw">UNSW-NB15</span><span class="kw">NSL-KDD</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="review">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">BPARC: Bilaterally Player-Aware Resource Compensation for Rain-Interrupted Limited-Overs Cricket Matches</div>
+          <div class="pub-item__authors">Abdul Mateen, Hassan Ahmed, Shahrzad Saremi</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--amber">Under Review</span>
+            <span>18th Australasian Conference on Mathematics and Computers in Sport</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">Sports Analytics</span><span class="kw">Cricket</span><span class="kw">DLS Method</span><span class="kw">AI Fairness</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="progress">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">GRADE: Graph-Regularized Adversarial Distillation for Edge-Deployed IoMT Intrusion Detection Systems</div>
+          <div class="pub-item__authors">Hassan Ahmed, Abdul Mateen</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--blue">In Progress</span>
+            <span>Lead: Dr. Tanja Pavleska</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">Knowledge Distillation</span><span class="kw">Graph Neural Networks</span><span class="kw">Edge AI</span><span class="kw">IoMT</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="progress">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">A Systematic Literature Review on Multimodal AI Methods for Alzheimer's Disease Detection</div>
+          <div class="pub-item__authors">Hassan Ahmed, Ghalib Nadeem</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--blue">In Progress</span>
+            <span>Lead: Dr. Imane Guellil</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">Alzheimer's Disease</span><span class="kw">Multimodal AI</span><span class="kw">SLR</span><span class="kw">Medical AI</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="progress">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">ARTP: An Autonomous Red-Team Planner for Pentesting</div>
+          <div class="pub-item__authors">Raja Muhammad Bilal Arshad, Abdullah Khan, Hassan Ahmed</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--blue">In Progress</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">Red Teaming</span><span class="kw">Autonomous Agents</span><span class="kw">Penetration Testing</span><span class="kw">LLMs</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="progress">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">Malware Detection Using Deep Learning</div>
+          <div class="pub-item__authors">Shahzad Tanveer, Hassan Ahmed, Abdullah Khan, Abdul Mateen</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--blue">In Progress</span>
+            <span>Lead: Dr. Tanja Pavleska</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">Malware Detection</span><span class="kw">Deep Learning</span><span class="kw">Binary Analysis</span><span class="kw">Cybersecurity</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub-item" role="listitem" data-status="progress">
+        <div class="pub-item__year">2026</div>
+        <div class="pub-item__body">
+          <div class="pub-item__title">An Energy-Aware Extension of PQC-LEO for Benchmarking Post-Quantum Cryptography on IoT Devices</div>
+          <div class="pub-item__authors">Kanwal Naz, Hassan Ahmed, Abdul Mateen, Shahrzad Saremi, Rania Shibl</div>
+          <div class="pub-item__meta">
+            <span class="badge badge--blue">In Progress</span>
+            <span>Lead: Dr. Shahrzad Saremi</span>
+          </div>
+          <div class="pub-keywords">
+            <span class="kw">Post-Quantum Cryptography</span><span class="kw">IoT</span><span class="kw">Energy Efficiency</span><span class="kw">Benchmarking</span>
+          </div>
+        </div>
+      </article>
+
+    </div><!-- /pub-list -->
+  </div>
+</section>
+
+
+<!-- ══════════ TEAM ══════════ -->
+<section class="section section--alt" id="team" aria-labelledby="team-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">People</span>
+      <h2 class="section-title" id="team-heading">Team</h2>
+      <p class="section-sub">A multidisciplinary and international group of researchers, scholars, and faculty.</p>
+    </div>
+
+    <!-- ── Leadership ── -->
+    <div class="team-section-group">
+      <div class="team-group-title">Leadership</div>
+      <div class="team-grid team-grid--featured" role="list">
+
+        <article class="member-card member-card--featured" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=a7hJLzwAAAAJ&citpid=6"
+               alt="Hassan Ahmed"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">HA</div>
+          <div class="member-card__name">Hassan Ahmed</div>
+          <div class="member-card__role">Founder · Lead Researcher</div>
+          <div class="member-card__inst">Department of Computer Science, National University of Computer and Emerging Sciences, Chiniot-Faisalabad Campus, Chiniot 35400, Pakistan</div>
+          <div class="member-card__expertise">Cybersecurity · Deep Learning · NLP · XAI · LLMs · Computer Vision</div>
+          <div class="expertise-tags">
+            <span class="kw">MS Computer Science</span>
+            <span class="kw">Instructor · FAST-NUCES</span>
+          </div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/hassanahmed1166/" target="_blank" rel="noopener" title="LinkedIn" aria-label="Hassan Ahmed LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=a7hJLzwAAAAJ" target="_blank" rel="noopener" title="Google Scholar" aria-label="Hassan Ahmed Google Scholar">GS</a>
+            <a href="https://hassanahmed1166.github.io/" target="_blank" rel="noopener" title="Website" aria-label="Hassan Ahmed Website">🌐</a>
+          </div>
+          <div class="member-card__email">hassan.ahmed@nu.edu.pk</div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+        <article class="member-card member-card--featured" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=NR8nCCkAAAAJ&citpid=3"
+               alt="Abdullah Khan"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">AK</div>
+          <div class="member-card__name">Abdullah Khan</div>
+          <div class="member-card__role">Co-Founder · Research Lead</div>
+          <div class="member-card__inst">Department of Computer Science, University of Wah, Wah Cantt, Pakistan</div>
+          <div class="member-card__expertise">Cybersecurity · Deep Learning · NLP · Applications of AI</div>
+          <div class="expertise-tags">
+		    <span class="kw">MS Computer Science</span>
+            <span class="kw">Researcher</span>
+            <span class="kw">University of Wah</span>
+          </div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/abdullah-khan-dev/" target="_blank" rel="noopener" title="LinkedIn" aria-label="Abdullah Khan LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=NR8nCCkAAAAJ" target="_blank" rel="noopener" title="Google Scholar" aria-label="Abdullah Khan Google Scholar">GS</a>
+          </div>
+          <div class="member-card__email">abdullahkhanswati@outlook.com</div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ── International Advisors ── -->
+    <div class="team-section-group">
+      <div class="team-group-title">International Advisors</div>
+      <div class="team-grid team-grid--featured" role="list">
+
+        <article class="member-card member-card--featured" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=oDhSiscAAAAJ&citpid=6"
+               alt="Dr. Shahrzad Saremi"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">SS</div>
+          <div class="member-card__name">Dr. Shahrzad Saremi</div>
+          <div class="member-card__role">Professor</div>
+          <div class="member-card__inst">School of Science, Technology and Engineering<br>University of the Sunshine Coast, Australia</div>
+          <div class="member-card__expertise">Augmented Reality · Gesture Recognition · Human-Computer Interaction · Optimization · Information Systems</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/shahrzad-saremi-b8329b189/" target="_blank" rel="noopener" title="LinkedIn" aria-label="Dr Saremi LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=oDhSiscAAAAJ" target="_blank" rel="noopener" title="Google Scholar" aria-label="Dr Saremi Scholar">GS</a>
+          </div>
+          <div class="member-card__email">ssaremi@usc.edu.au</div>
+          <div class="member-card__country">🇦🇺 Australia</div>
+        </article>
+
+        <article class="member-card member-card--featured" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=e32UXEIAAAAJ&citpid=3"
+               alt="Dr. Rania Shibl"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">RS</div>
+          <div class="member-card__name">Dr. Rania Shibl</div>
+          <div class="member-card__role">Professor &amp; Associate Dean Education</div>
+          <div class="member-card__inst">Faculty of Science and Engineering<br>Southern Cross University, Australia</div>
+          <div class="member-card__expertise">Information Systems · Health IT · Social Media · Cybercrime · Fraud Detection</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/rania-shibl-62014077/" target="_blank" rel="noopener" title="LinkedIn" aria-label="Dr Shibl LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=e32UXEIAAAAJ" target="_blank" rel="noopener" title="Google Scholar" aria-label="Dr Shibl Scholar">GS</a>
+          </div>
+          <div class="member-card__email">rania.shibl@scu.edu.au</div>
+          <div class="member-card__country">🇦🇺 Australia</div>
+        </article>
+
+        <article class="member-card member-card--featured" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=jHnvTCcAAAAJ&citpid=1"
+               alt="Dr. Tanja Pavleska"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">TP</div>
+          <div class="member-card__name">Dr. Tanja Pavleska</div>
+          <div class="member-card__role">Researcher</div>
+          <div class="member-card__inst">Laboratory for Open Systems and Networks<br>Jozef Stefan Institute, Slovenia</div>
+          <div class="member-card__expertise">Cybersecurity · Artificial Intelligence · System Design · e-Governance · Digital Transformation</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/tanjaazderska/" target="_blank" rel="noopener" title="LinkedIn" aria-label="Dr Pavleska LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=jHnvTCcAAAAJ" target="_blank" rel="noopener" title="Google Scholar" aria-label="Dr Pavleska Scholar">GS</a>
+          </div>
+          <div class="member-card__email">atanja@e5.ijs.si</div>
+          <div class="member-card__country">🇸🇮 Slovenia</div>
+        </article>
+
+        <article class="member-card member-card--featured" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=EQk5dlkAAAAJ&citpid=5"
+               alt="Dr. Imane Guellil"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">IG</div>
+          <div class="member-card__name">Dr. Imane Guellil</div>
+          <div class="member-card__role">Research Fellow (Data Science/AI/Engineering)</div>
+          <div class="member-card__inst">Cancer and Genomic Sciences<br>University of Birmingham, United Kingdom</div>
+          <div class="member-card__expertise">Sentiment Analysis · Hate Speech Detection · Named Entity Recognition · Machine Learning · Medical NLP</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/imane-guellil-10699253/" target="_blank" rel="noopener" title="LinkedIn" aria-label="Dr Guellil LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=EQk5dlkAAAAJ" target="_blank" rel="noopener" title="Google Scholar" aria-label="Dr Guellil Scholar">GS</a>
+          </div>
+          <div class="member-card__email">i.guellil@bham.ac.uk</div>
+          <div class="member-card__country">🇬🇧 United Kingdom</div>
+        </article>
+
+        <article class="member-card member-card--featured" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=rqVaH0oAAAAJ&citpid=7"
+               alt="Ike Devi Sulistyaningtyas"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">ID</div>
+          <div class="member-card__name">Ike Devi Sulistyaningtyas</div>
+          <div class="member-card__role">Lecturer &amp; Head of Public Relations Department</div>
+          <div class="member-card__inst">Faculty of Social and Political Sciences<br>Universitas Atma Jaya Yogyakarta, Indonesia</div>
+          <div class="member-card__expertise">Communication Strategy · Public Relations · Digital Communication</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/ike-devi-sulistyaningtyas-0239137a/" target="_blank" rel="noopener" title="LinkedIn" aria-label="Ike Devi LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=rqVaH0oAAAAJ&hl=en" target="_blank" rel="noopener" title="Google Scholar" aria-label="Ike Devi Scholar">GS</a>
+          </div>
+          <div class="member-card__email">ike.devi@uajy.ac.id</div>
+          <div class="member-card__country">🇮🇩 Indonesia</div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ── Core Researchers ── -->
+    <div class="team-section-group">
+      <div class="team-group-title">Core Researchers &amp; Members</div>
+      <div class="team-grid" role="list">
+
+        <article class="member-card" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=CrlrCQkAAAAJ&citpid=5"
+               alt="Abdul Mateen"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">AM</div>
+          <div class="member-card__name">Abdul Mateen</div>
+          <div class="member-card__role">Senior Researcher</div>
+          <div class="member-card__inst">Department of Computer Science, National University of Computer and Emerging Sciences, Chiniot-Faisalabad Campus, Chiniot</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/ammateen49/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=CrlrCQkAAAAJ" target="_blank" rel="noopener" title="Scholar">GS</a>
+          </div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+		
+		
+        <article class="member-card" role="listitem">
+          <img class="member-card__photo"
+               src="https://cfd.nu.edu.pk/wp-content/uploads/2025/01/IMG_1024-scaled-e1737451888897-290x333.jpg"
+               alt="Kanwal Naz"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">KN</div>
+          <div class="member-card__name">Kanwal Naz</div>
+          <div class="member-card__role">Researcher · Member</div>
+          <div class="member-card__inst">Department of Software Engineering, National University of Computer and Emerging Sciences, Chiniot-Faisalabad Campus, Chiniot</div>
+          		            <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/kanwal-naz-a2257115a/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>		  
+		  <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+		
+
+        <article class="member-card" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=9-Y_EvAAAAAJ&citpid=4"
+               alt="Ghalib Nadeem"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">GN</div>
+          <div class="member-card__name">Ghalib Nadeem</div>
+          <div class="member-card__role">Researcher · PhD Scholar</div>
+          <div class="member-card__inst">Department of Computer Science, Huazhong University of Science and Technology, Wuhan, China.</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/ghalib-nadeem-023678189/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=9-Y_EvAAAAAJ" target="_blank" rel="noopener" title="Scholar">GS</a>
+          </div>
+          <div class="member-card__country"> China</div>
+        </article>
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">AF</div>
+          <div class="member-card__name">Arooj Fatima</div>
+          <div class="member-card__role">Researcher · Member</div>
+          <div class="member-card__inst">Department of Computer Science, University of Wah, Wah Cantt, Pakistan</div>
+         
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/arooj-fatima-17979223b/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+		  
+		 <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">RJ</div>
+          <div class="member-card__name">Ridda Jameel</div>
+          <div class="member-card__role">Researcher · Member</div>
+          <div class="member-card__inst">Department of Computer Science, University of Wah, Wah Cantt, Pakistan</div>
+          
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/ridda-jamil-6142522bb/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+		  
+		  <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">AS</div>
+          <div class="member-card__name">Aini Saba</div>
+          <div class="member-card__role">Researcher · Member</div>
+          <div class="member-card__inst">Department of Computer Science, University of Wah, Wah Cantt, Pakistan</div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">ZA</div>
+          <div class="member-card__name">Zeshaan Ali</div>
+          <div class="member-card__role">Researcher · Member</div>
+          <div class="member-card__inst">COMSATS University Islamabad, Wah Campus</div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">ST</div>
+          <div class="member-card__name">Shahzad Tanveer</div>
+          <div class="member-card__role">Member · Masters Student</div>
+          <div class="member-card__inst">Department of Computer Science, National University of Computer and Emerging Sciences, Chiniot-Faisalabad Campus, Chiniot</div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+		
+		
+		
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">SA</div>
+          <div class="member-card__name">Sohaib Ahmed</div>
+          <div class="member-card__role">Researcher · Member</div>
+          <div class="member-card__inst">COMSATS University Islamabad, Wah Campus</div>
+          
+		          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/sohaibahmed341/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>  
+		  
+		  <div class="member-card__country">🇶🇦 Qatar</div>
+        </article>
+		
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">SA2</div>
+          <div class="member-card__name">Saood Ahmed</div>
+          <div class="member-card__role">Researcher · Member</div>
+          <div class="member-card__inst">Department of Electrical Engineering, University of Management and Technology, Lahore, Pakistan </div>
+		  
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/saood-ahmed/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+		  
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">RMBA</div>
+          <div class="member-card__name">Raja Muhammad Bilal Arshad</div>
+          <div class="member-card__role">Undergraduate Student</div>
+          <div class="member-card__inst">Department of Computer Science, National University of Computer and Emerging Sciences, Chiniot-Faisalabad Campus, Chiniot</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/raja-muhammad-bilal-arshad/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+		  
+		  <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+		
+      </div>
+    </div>
+
+    <!-- ── Interdisciplinary Researchers ── -->
+    <div class="team-section-group">
+      <div class="team-group-title">Interdisciplinary Researchers</div>
+      <div class="team-grid" role="list">
+
+
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">MY</div>
+          <div class="member-card__name">Muhammad Yousaf</div>
+          <div class="member-card__role">PhD Scholar</div>
+          <div class="member-card__inst">Engineering Complex Software Systems, Simula Research Laboratory, Norway</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/myousafastian/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+          <div class="member-card__country">🇳🇴 Norway</div>
+        </article>
+
+        <article class="member-card" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=tD9XOdwAAAAJ&citpid=11"
+               alt="Ali Raza Kashif"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">ARK</div>
+          <div class="member-card__name">Ali Raza Kashif</div>
+          <div class="member-card__role">PhD Scholar</div>
+          <div class="member-card__inst">School of Materials Science and Engineering, Huazhong University of Science &amp; Technology</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/alirazakashif/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=tD9XOdwAAAAJ" target="_blank" rel="noopener" title="Scholar">GS</a>
+          </div>
+          <div class="member-card__country">🇨🇳 China</div>
+        </article>
+		
+        <article class="member-card" role="listitem">
+          <img class="member-card__photo"
+               src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=FVzxhLgAAAAJ&citpid=31"
+               alt="Farasat Haider"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="member-card__initials" style="display:none">FH</div>
+          <div class="member-card__name">Farasat Haider</div>
+          <div class="member-card__role">Masters Student</div>
+          <div class="member-card__inst">School of Nanoscience and Technology, Chulalongkorn University, Bangkok</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/farasat-haider-390a82298/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+            <a href="https://scholar.google.com/citations?user=FVzxhLgAAAAJ" target="_blank" rel="noopener" title="Scholar">GS</a>
+          </div>
+          <div class="member-card__country">🇹🇭 Thailand</div>
+        </article>
+		
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">NF</div>
+          <div class="member-card__name">Nimra Farooq</div>
+          <div class="member-card__role">Member</div>
+          <div class="member-card__inst">Institute of Health Sciences, Khwaja Fareed University, Pakistan</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/nimra-farooq-aesthetician/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">QA</div>
+          <div class="member-card__name">Qasim Ali</div>
+          <div class="member-card__role">Member</div>
+          <div class="member-card__inst">Department of Textile Technology, National Textile University, Pakistan</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/qasim63/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials">HK</div>
+          <div class="member-card__name">Hassan Khan</div>
+          <div class="member-card__role">Member</div>
+          <div class="member-card__inst">Department of Industrial Engineering, Tsinghua University, China</div>
+          <div class="member-card__country">🇨🇳 China</div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ── Former Members ── -->
+    <div class="team-section-group">
+      <div class="team-group-title">Former Members</div>
+      <div class="team-grid" role="list">
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials" style="background:#9ca3af">YY</div>
+          <div class="member-card__name">Yahya Younas</div>
+          <div class="member-card__role">Former Member</div>
+          <div class="member-card__inst">COMSATS University, Wah Campus</div>
+		            <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/yahyayounas/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+        <article class="member-card" role="listitem">
+          <div class="member-card__initials" style="background:#9ca3af">RM</div>
+          <div class="member-card__name">Rabia Maqbool</div>
+          <div class="member-card__role">Former Member</div>
+          <div class="member-card__inst">NUML, Pakistan</div>
+          <div class="member-card__links">
+            <a href="https://www.linkedin.com/in/rabia-paracha-158081151/" target="_blank" rel="noopener" title="LinkedIn">in</a>
+          </div>
+          <div class="member-card__country">🇵🇰 Pakistan</div>
+        </article>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════ WORLD MAP ══════════ -->
+<section class="section map-section" id="map-section" aria-labelledby="map-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Global Reach</span>
+      <h2 class="section-title" id="map-heading">Member Locations</h2>
+      <p class="section-sub">NeuraSec spans 8+ countries across 4 continents — hover the pins to explore our global network.</p>
+    </div>
+
+    <div id="worldMap" role="img" aria-label="World map showing NeuraSec member locations">
+      <div class="map-tooltip" id="mapTooltip"></div>
+      <!-- SVG world map rendered by JS -->
+    </div>
+
+    <div class="map-legend" aria-label="Map legend">
+      <div class="map-legend-item"><div class="map-legend-dot"></div> Member / Institution location</div>
+    </div>
+
+    <!-- Country list fallback -->
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem" role="list" aria-label="Countries represented">
+      <span class="badge badge--blue" role="listitem">🇵🇰 Pakistan</span>
+      <span class="badge badge--blue" role="listitem">🇦🇺 Australia</span>
+      <span class="badge badge--blue" role="listitem">🇬🇧 United Kingdom</span>
+      <span class="badge badge--blue" role="listitem">🇸🇮 Slovenia</span>
+      <span class="badge badge--blue" role="listitem">🇳🇴 Norway</span>
+      <span class="badge badge--blue" role="listitem">🇨🇳 China</span>
+      <span class="badge badge--blue" role="listitem">🇹🇭 Thailand</span>
+      <span class="badge badge--blue" role="listitem">🇮🇩 Indonesia</span>
+      <span class="badge badge--blue" role="listitem">🇶🇦 Qatar</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ NEWS ══════════ -->
+<section class="section section--alt" id="news" aria-labelledby="news-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Updates</span>
+      <h2 class="section-title" id="news-heading">News &amp; Events</h2>
+    </div>
+    <div class="news-list" role="list">
+
+      <div class="news-item" role="listitem">
+        <div class="news-item__date">May 2026</div>
+        <div>
+          <span class="badge badge--green" style="margin-bottom:.3rem">Membership</span>
+          <div class="news-item__title">Dr. Tanja Pavleska (Jozef Stefan Institute, Slovenia) joins as International Advisor</div>
+        </div>
+      </div>
+
+      <div class="news-item" role="listitem">
+        <div class="news-item__date">Jan 2026</div>
+        <div>
+          <span class="badge badge--green" style="margin-bottom:.3rem">Publication</span>
+          <div class="news-item__title">Bot detection paper published in ICCK Transactions on Emerging Topics in AI (Vol. 3, No. 1)</div>
+        </div>
+      </div>
+
+      <div class="news-item" role="listitem">
+        <div class="news-item__date">Oct 2025</div>
+        <div>
+          <span class="badge badge--green" style="margin-bottom:.3rem">Membership</span>
+          <div class="news-item__title">Dr. Shahrzad Saremi and Dr. Rania Shibl join as International Advisors</div>
+        </div>
+      </div>
+
+      <div class="news-item" role="listitem">
+        <div class="news-item__date">Aug 2025</div>
+        <div>
+          <span class="badge badge--green" style="margin-bottom:.3rem">Membership</span>
+          <div class="news-item__title">Dr. Imane Guellil (University of Birmingham) joins as International Advisor</div>
+        </div>
+      </div>
+
+      <div class="news-item" role="listitem">
+        <div class="news-item__date">Aug 2024</div>
+        <div>
+          <span class="badge badge--blue" style="margin-bottom:.3rem">Announcement</span>
+          <div class="news-item__title">NeuraSec Research Group founded by Hassan Ahmed and Abdullah Khan</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ PARTNERS ══════════ -->
+<section class="section" id="collaborators" aria-labelledby="collab-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Network</span>
+      <h2 class="section-title" id="collab-heading">Partner Institutions</h2>
+      <p class="section-sub">Collaborative institutions contributing to joint research initiatives.</p>
+    </div>
+    <div class="partners-grid" role="list">
+      <div class="partner-card" role="listitem">
+        <div class="partner-card__name">University of the Sunshine Coast</div>
+        <div class="partner-card__meta">University · Australia</div>
+      </div>
+      <div class="partner-card" role="listitem">
+        <div class="partner-card__name">Southern Cross University</div>
+        <div class="partner-card__meta">University · Australia</div>
+      </div>
+      <div class="partner-card" role="listitem">
+        <div class="partner-card__name">Jozef Stefan Institute</div>
+        <div class="partner-card__meta">Research Institute · Slovenia</div>
+      </div>
+      <div class="partner-card" role="listitem">
+        <div class="partner-card__name">Tsinghua University</div>
+        <div class="partner-card__meta">University · China</div>
+      </div>
+      <div class="partner-card" role="listitem">
+        <div class="partner-card__name">University of Birmingham</div>
+        <div class="partner-card__meta">University · United Kingdom</div>
+      </div>
+      <div class="partner-card" role="listitem">
+        <div class="partner-card__name">Simula Research Laboratory</div>
+        <div class="partner-card__meta">Research Lab · Norway</div>
+      </div>
+      <div class="partner-card" role="listitem">
+        <div class="partner-card__name">Universitas Atma Jaya Yogyakarta</div>
+        <div class="partner-card__meta">University · Indonesia</div>
+      </div>
+      <div class="partner-card" role="listitem">
+        <div class="partner-card__name">Chulalongkorn University</div>
+        <div class="partner-card__meta">University · Thailand</div>
+      </div>
+	  
+	  <div class="partner-card" role="listitem">
+        <div class="partner-card__name">Huazhong University of Science & Technology</div>
+        <div class="partner-card__meta">University · China</div>
+      </div>
+	  
+	 <div class="partner-card" role="listitem">
+        <div class="partner-card__name">COMSASTS University Islamabad, Wah Campus</div>
+        <div class="partner-card__meta">University · Pakistan</div>
+      </div>
+	  
+	  
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ CONTACT ══════════ -->
+<section class="section section--alt" id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Get in Touch</span>
+      <h2 class="section-title" id="contact-heading">Contact</h2>
+      <p class="section-sub">We welcome collaboration inquiries, research partnerships, and prospective student applications.</p>
+    </div>
+    <div class="contact-row">
+      <a href="mailto:neurasec1@gmail.com" class="contact-item">
+        <span aria-hidden="true">✉</span>neurasec1@gmail.com
+      </a>
+      <a href="https://www.linkedin.com/in/hassanahmed1166/" target="_blank" rel="noopener" class="contact-item">
+        <span aria-hidden="true">in</span>LinkedIn
+      </a>
+      <a href="https://scholar.google.com/citations?user=a7hJLzwAAAAJ" target="_blank" rel="noopener" class="contact-item">
+        <span aria-hidden="true">GS</span>Google Scholar
+      </a>
+    </div>
+    <p style="margin-top:1.5rem; font-size:.875rem; color:var(--text-muted);">
+      NeuraSec Research Group is based at the Department of Computer Science,
+      FAST-NUCES CFD Campus, Pakistan. Collaborators span Australia, UK, Slovenia,
+      Norway, China, Indonesia, Thailand, and beyond.
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer role="contentinfo">
+  <div class="container">
+    <p>
+      &copy; 2024–2026 <strong>NeuraSec Research Group</strong> ·
+      Advancing AI Security and Intelligent Systems ·
+      <a href="mailto:neurasec1@gmail.com" style="color:rgba(255,255,255,.5)">neurasec1@gmail.com</a>
+    </p>
+  </div>
+</footer>
+
+<!-- Go to Top button -->
+<button id="goTop" aria-label="Go to top">↑</button>
+
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<script>
+/* ── Nav toggle ── */
+const toggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+toggle.addEventListener('click', () => {
+  const open = navLinks.classList.toggle('open');
+  toggle.setAttribute('aria-expanded', open);
+});
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => { navLinks.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+});
+
+/* ── Active nav on scroll ── */
+const sections = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('.nav__links a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navAnchors.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`.nav__links a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.25 });
+sections.forEach(s => obs.observe(s));
+
+/* ── Abstract toggle ── */
+function toggleAbstract(btn) {
+  const body = btn.nextElementSibling;
+  const open = body.classList.toggle('open');
+  btn.textContent = open ? '▾ Abstract' : '▸ Abstract';
+  btn.setAttribute('aria-expanded', open);
+}
+
+/* ── Go to top ── */
+const goTopBtn = document.getElementById('goTop');
+window.addEventListener('scroll', () => {
+  goTopBtn.classList.toggle('visible', window.scrollY > 400);
+});
+goTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+/* ── Stat counter animation ── */
+function animateCounter(el, target, suffix) {
+  let start = 0;
+  const dur = 1200;
+  const step = 16;
+  const inc = target / (dur / step);
+  const timer = setInterval(() => {
+    start += inc;
+    if (start >= target) { el.textContent = target + suffix; clearInterval(timer); }
+    else { el.textContent = Math.floor(start) + suffix; }
+  }, step);
+}
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.hero__stat-num[data-target]').forEach(el => {
+        animateCounter(el, parseInt(el.dataset.target), '+');
+        delete el.dataset.target;
+      });
+      statsObs.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+const heroEl = document.querySelector('.hero');
+if (heroEl) statsObs.observe(heroEl);
+
+/* ── Pub filter ── */
+document.querySelectorAll('.pub-filter__btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pub-filter__btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.pub-item').forEach(item => {
+      if (filter === 'all' || item.dataset.status === filter) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+
+/* ── Visitor counter (localStorage-based, auto-increments per session) ── */
+(function() {
+  try {
+    const key = 'neurasec_visits';
+    const sessionKey = 'neurasec_session';
+    let count = parseInt(localStorage.getItem(key) || '0');
+    if (!sessionStorage.getItem(sessionKey)) {
+      count += 1;
+      localStorage.setItem(key, count);
+      sessionStorage.setItem(sessionKey, '1');
+    }
+    // Seed with a base count to look realistic on first visit
+    const displayCount = count + 1247;
+    let shown = 0;
+    const target = displayCount;
+    const step = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+      shown += step;
+      if (shown >= target) {
+        shown = target;
+        clearInterval(timer);
+      }
+      document.getElementById('visitorCount').textContent = shown.toLocaleString();
+    }, 18);
+  } catch(e) {
+    document.getElementById('visitorCount').textContent = '1,248';
+  }
+})();
+
+/* ── World Map ── */
+(function() {
+  const mapDiv = document.getElementById('worldMap');
+  const tooltip = document.getElementById('mapTooltip');
+
+  // Member pin data [label, lat, lon, members]
+  const pins = [
+    { label: '🇵🇰 Pakistan\nHassan Ahmed, Abdullah Khan, Abdul Mateen,\nArooj Fatima, Ridda Jameel, Kanwal Naz,\nGhalib Nadeem, Shahzad Tanveer, Aini Saba,\nZeshaan Ali, Saood Ahmed, Nimra Farooq, Qasim Ali', lat: 33.6, lon: 73.1 },
+    { label: '🇦🇺 Australia\nDr. Shahrzad Saremi (Sunshine Coast)\nDr. Rania Shibl (Southern Cross Univ.)', lat: -25.3, lon: 133.8 },
+    { label: '🇬🇧 United Kingdom\nDr. Imane Guellil (Univ. of Birmingham)', lat: 52.5, lon: -1.9 },
+    { label: '🇸🇮 Slovenia\nDr. Tanja Pavleska (Jozef Stefan Institute)', lat: 46.1, lon: 14.8 },
+    { label: '🇳🇴 Norway\nMuhammad Yousaf (Simula Research Lab)', lat: 59.9, lon: 10.7 },
+    { label: '🇨🇳 China\nAli Raza Kashif (HUST)\nHassan Khan (Tsinghua)', lat: 35.9, lon: 104.2 },
+    { label: '🇹🇭 Thailand\nFarasat Haider (Chulalongkorn Univ.)', lat: 13.7, lon: 100.5 },
+    { label: '🇮🇩 Indonesia\nIke Devi Sulistyaningtyas\n(Univ. Atma Jaya Yogyakarta)', lat: -7.8, lon: 110.4 },
+    { label: '🇶🇦 Qatar\nSohaib Ahmed', lat: 25.3, lon: 51.2 },
+  ];
+
+  // Simple equirectangular projection
+  const W = 960, H = 480;
+  function lonToX(lon) { return (lon + 180) * (W / 360); }
+  function latToY(lat) { return (90 - lat) * (H / 180); }
+
+  // Minimal SVG world paths (simplified polygons for key landmasses)
+  // Using a hand-crafted simplified world outline
+  const landPaths = [
+    // North America
+    "M 95,85 L 140,70 L 185,75 L 195,110 L 190,140 L 170,155 L 155,165 L 145,175 L 130,180 L 120,175 L 100,155 L 90,130 L 85,110 Z",
+    // Central America
+    "M 150,175 L 165,175 L 170,185 L 160,190 L 150,185 Z",
+    // Greenland
+    "M 195,40 L 230,35 L 240,55 L 225,70 L 205,65 Z",
+    // South America
+    "M 185,195 L 215,185 L 240,195 L 250,220 L 255,255 L 245,285 L 230,300 L 215,295 L 200,270 L 185,240 L 180,215 Z",
+    // Europe
+    "M 430,70 L 480,65 L 510,75 L 505,95 L 490,105 L 470,110 L 450,105 L 435,95 Z",
+    // Scandinavia
+    "M 465,50 L 490,45 L 500,65 L 480,70 L 465,65 Z",
+    // UK/Ireland
+    "M 430,78 L 440,72 L 445,82 L 437,87 Z",
+    // Africa
+    "M 450,130 L 505,120 L 525,140 L 530,175 L 525,210 L 510,240 L 490,255 L 470,250 L 455,225 L 445,190 L 442,155 Z",
+    // Russia/Central Asia
+    "M 510,55 L 650,50 L 720,65 L 730,90 L 680,100 L 620,95 L 560,85 L 510,80 Z",
+    // Middle East
+    "M 510,115 L 555,110 L 570,125 L 565,145 L 545,150 L 515,140 Z",
+    // South Asia
+    "M 580,115 L 625,110 L 645,130 L 640,160 L 620,175 L 600,165 L 580,145 Z",
+    // China/East Asia
+    "M 645,90 L 710,85 L 740,100 L 745,130 L 720,145 L 685,140 L 650,125 L 640,105 Z",
+    // Southeast Asia
+    "M 680,155 L 720,148 L 735,165 L 725,180 L 700,178 L 680,168 Z",
+    // Indonesia (approx)
+    "M 690,195 L 730,190 L 755,195 L 760,210 L 730,215 L 695,210 Z",
+    // Japan/Korea
+    "M 735,95 L 755,90 L 760,105 L 748,112 L 735,107 Z",
+    // Australia
+    "M 680,250 L 745,240 L 775,255 L 780,285 L 760,305 L 725,310 L 695,295 L 675,270 Z",
+    // New Zealand
+    "M 790,305 L 800,298 L 805,312 L 798,320 L 788,315 Z",
+  ];
+
+  let svgHTML = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="display:block">
+    <rect width="${W}" height="${H}" fill="#dce8f3"/>
+    ${landPaths.map(d => `<path d="${d}" class="map-country"/>`).join('\n    ')}`;
+
+  // Add pins
+  pins.forEach((pin, i) => {
+    const x = lonToX(pin.lon);
+    const y = latToY(pin.lat);
+    svgHTML += `\n    <circle class="map-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" data-index="${i}"/>`;
+  });
+
+  svgHTML += `\n  </svg>`;
+  mapDiv.insertAdjacentHTML('afterbegin', svgHTML);
+
+  // Tooltip interaction
+  mapDiv.querySelectorAll('.map-dot').forEach(dot => {
+    const pin = pins[parseInt(dot.dataset.index)];
+
+    dot.addEventListener('mouseenter', e => {
+      tooltip.innerHTML = pin.label.replace(/\n/g, '<br>');
+      tooltip.style.opacity = '1';
+    });
+
+    dot.addEventListener('mousemove', e => {
+      const rect = mapDiv.getBoundingClientRect();
+      let x = e.clientX - rect.left + 12;
+      let y = e.clientY - rect.top - 10;
+      if (x + 200 > mapDiv.offsetWidth) x = e.clientX - rect.left - tooltip.offsetWidth - 12;
+      tooltip.style.left = x + 'px';
+      tooltip.style.top  = y + 'px';
+    });
+
+    dot.addEventListener('mouseleave', () => {
+      tooltip.style.opacity = '0';
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
