@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>People · NeuraSec Research Group</title>
+  <meta name="description" content="Leadership, international advisors and researchers of the NeuraSec Research Group." />
+  <meta name="theme-color" content="#07122b" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%231d4ed8' d='M12 2 4 6v6c0 5.25 3.4 10.15 8 11.5 4.6-1.35 8-6.25 8-11.5V6l-8-4z'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500;1,8..60,600&display=swap" />
+  <link rel="stylesheet" href="css/neurasec.css" />
+  <script>
+    try { var t = localStorage.getItem('neurasec-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body data-page="people">
+
+<header id="site-header"></header>
+
+<main>
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">People</span>
+    <h1 class="page-hero__title">Our team</h1>
+    <p class="page-hero__sub">A multidisciplinary, international group of researchers, scholars and faculty. Open any profile to see that person’s papers and co-authors.</p>
+    <div class="page-hero__facts"><span class="page-hero__fact"><b data-count="members">–</b>researchers &amp; advisors</span><span class="page-hero__fact"><b data-count="countries">–</b>countries</span></div>
+  </div>
+</section>
+
+<section class="section" aria-label="Team members">
+  <div class="container">
+    <div class="page-tools">
+      <nav class="chips" id="groupNav" aria-label="Jump to group"></nav>
+      <div class="view-toggle" role="group" aria-label="Choose layout">
+        <button type="button" data-view="grid" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></g></svg>Cards</button>
+        <button type="button" data-view="list" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg>Contributions</button>
+      </div>
+    </div>
+    <div id="teamGroups"></div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="data/members.js"></script>
+<script src="data/publications.js"></script>
+<script src="data/site.js"></script>
+<script src="js/common.js"></script>
+<script src="js/pages.js"></script>
+</body>
+</html>

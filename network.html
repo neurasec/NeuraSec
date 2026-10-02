@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Reach · NeuraSec Research Group</title>
+  <meta name="description" content="Where NeuraSec members are based, and our partner institutions." />
+  <meta name="theme-color" content="#07122b" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%231d4ed8' d='M12 2 4 6v6c0 5.25 3.4 10.15 8 11.5 4.6-1.35 8-6.25 8-11.5V6l-8-4z'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500;1,8..60,600&display=swap" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="css/neurasec.css" />
+  <script>
+    try { var t = localStorage.getItem('neurasec-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body data-page="network">
+
+<header id="site-header"></header>
+
+<main>
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Global reach</span>
+    <h1 class="page-hero__title">Where we are</h1>
+    <p class="page-hero__sub">NeuraSec brings together researchers and advisors from across Asia, Australia, Europe and the Middle East.</p>
+    <div class="page-hero__facts"><span class="page-hero__fact"><b data-count="countries">–</b>countries</span><span class="page-hero__fact"><b data-count="members">–</b>people</span><span class="page-hero__fact"><b data-count="partners">–</b>partner institutions</span></div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="map-heading">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Member locations</span>
+      <h2 class="section-title" id="map-heading">Our map</h2>
+      <p class="section-sub" id="mapSub">Select a pin to see who works there.</p>
+    </div>
+    <div class="map-wrap reveal">
+      <div id="leafletMap" role="region" aria-label="Interactive map of NeuraSec member locations"></div>
+      <span class="map-hint">Click the map to enable scroll-zoom</span>
+    </div>
+    <div class="map-legend">
+      <span><i style="background:#1d4ed8"></i>Members</span>
+      <span><i style="background:#0e9f8e"></i>International advisors</span>
+      <span><i style="background:linear-gradient(135deg,#1d4ed8 50%,#0e9f8e 50%)"></i>Both</span>
+    </div>
+    <div class="countries" id="countryList" aria-label="Countries represented"></div>
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="partners-heading">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Network</span>
+      <h2 class="section-title" id="partners-heading">Partner institutions</h2>
+      <p class="section-sub">Institutions contributing to joint research.</p>
+    </div>
+    <div class="partners" id="partnerList"></div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="data/members.js"></script>
+<script src="data/publications.js"></script>
+<script src="data/site.js"></script>
+<script src="js/common.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/pages.js"></script>
+</body>
+</html>
