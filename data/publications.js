@@ -158,6 +158,13 @@ window.NEURASEC_PUBLICATIONS = [
 
   /* ───────────── Under Review ───────────── */
   {
+    id: 'dyslexia-handwriting-2026',
+    title: 'Benchmark Saturation in Synthetic Dyslexia Handwriting Detection: A Seven-Detector Dual-Domain Evaluation With Intrinsic and EigenCAM Explainability',
+    authors: ['Javeria Iqbal', 'Hassan Ahmed', 'Hanzla Iqbal', 'Shahrzad Saremi', 'Rania Shibl', 'Alan Wee-Chung Liew', 'Akhlaqur Rahman', 'Mostafa Kamalpour'],
+    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
+    keywords: ['Dyslexia', 'Handwriting Analysis', 'Object Detection', 'Explainability', 'EigenCAM']
+  },
+  {
     id: 'phishattn-2026',
     title: 'PhishAttn: A Hybrid CNN-BiLSTM-Attention Framework for Semantic and Statistical Phishing URLs Detection',
     authors: ['Hassan Ahmed', 'Arooj Fatima', 'Abdullah Khan', 'Shahrzad Saremi', 'Rania Shibl', 'Mansooreh Mirzaei'],

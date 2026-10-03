@@ -6,6 +6,9 @@
 
 window.NEURASEC_NEWS = [
   { date: '2026-10', tag: 'Membership',
+    text: 'Four researchers join NeuraSec: Furqan Ahmad (PhD Scholar, Northwestern Polytechnical University, China), Hina Mehboob (NUST, Pakistan), and Faria Hossain and Abir Hasan Talha (Northern University Bangladesh)',
+    members: ['furqan-ahmad', 'hina-mehboob', 'faria-hossain', 'abir-hasan-talha'] },
+  { date: '2026-10', tag: 'Membership',
     text: 'Manar Makki Shaalan (University of Babylon, Iraq) joins as a researcher, bringing expertise in graph theory, domination theory and network reliability',
     members: ['manar-makki-shaalan'] },
   { date: '2026-10', tag: 'Conference',
@@ -39,7 +42,9 @@ window.NEURASEC_PARTNERS = [
   { name: 'Universitas Atma Jaya Yogyakarta', kind: 'University', country: 'Indonesia' },
   { name: 'Chulalongkorn University', kind: 'University', country: 'Thailand' },
   { name: 'COMSATS University Islamabad, Wah Campus', kind: 'University', country: 'Pakistan' },
-  { name: 'University of Babylon', kind: 'University', country: 'Iraq' }
+  { name: 'University of Babylon', kind: 'University', country: 'Iraq' },
+  { name: 'Northwestern Polytechnical University', kind: 'University', country: 'China' },
+  { name: 'Northern University Bangladesh', kind: 'University', country: 'Bangladesh' }
 ];
 
 window.NEURASEC_TOOLS = [
