@@ -107,6 +107,20 @@
   });
   MEMBERS.forEach((m) => { m.pubs = NS.sortPubs(m.pubs); m.led = NS.sortPubs(m.led); });
 
+  /** Contribution score: published/accepted papers count 2, under review/submitted 1. */
+  NS.contributionScore = (m) => m.pubs.reduce((n, p) => n + (p.numbered ? 2 : 1), 0);
+
+  // Order members by group; groups flagged sortByContribution put the biggest
+  // contributors first (ties: more peer-reviewed papers, then data-file order).
+  const groupIdx = new Map(GROUPS.map((g, i) => [g.id, i]));
+  const sortedGroups = new Set(GROUPS.filter((g) => g.sortByContribution).map((g) => g.id));
+  const peer = (m) => m.pubs.filter((p) => p.numbered).length;
+  MEMBERS.sort((a, b) =>
+    (groupIdx.get(a.group) ?? 99) - (groupIdx.get(b.group) ?? 99) ||
+    (sortedGroups.has(a.group) ? NS.contributionScore(b) - NS.contributionScore(a) || peer(b) - peer(a) : 0) ||
+    a._order - b._order);
+  MEMBERS.forEach((m, i) => { m._order = i; });
+
   /** Numbered papers of a member split by type, oldest first (J1, J4, …). */
   NS.contributions = (m) => {
     const out = { journal: [], conference: [], chapter: [], ongoing: [] };
@@ -268,7 +282,7 @@
       header.innerHTML =
         '<nav class="nav" aria-label="Main navigation"><div class="nav__inner">' +
           '<a class="brand" href="index.html" aria-label="NeuraSec home">' +
-            '<span class="brand__logo">' + NS.icon.shield + '</span>' +
+            '<span class="brand__logo"><img src="images/logo.png" alt="" width="34" height="34"></span>' +
             '<span class="brand__text"><span class="brand__name">NeuraSec</span><span class="brand__sub">Research Group</span></span>' +
           '</a>' +
           '<ul class="nav__links" id="navLinks">' +
@@ -296,7 +310,7 @@
     if (footer) {
       footer.innerHTML =
         '<div class="container footer__inner">' +
-          '<div class="footer__brand"><span class="brand__logo">' + NS.icon.shield + '</span>' +
+          '<div class="footer__brand"><span class="brand__logo"><img src="images/logo.png" alt="" width="34" height="34"></span>' +
             '<div><strong>NeuraSec Research Group</strong><span>Advancing AI Security and Intelligent Systems</span></div></div>' +
           '<nav class="footer__nav" aria-label="Site map">' +
             '<a href="index.html">Home</a>' +

@@ -13,12 +13,15 @@
       add that spelling to `aliases`.
 
    group: leadership | advisors | core | interdisciplinary | former
+   Groups marked `sortByContribution` are ordered automatically by
+   papers (published/accepted count 2, others 1); elsewhere the
+   order below is kept.
    ============================================================ */
 
 window.NEURASEC_GROUPS = [
   { id: 'leadership',        title: 'Leadership' },
   { id: 'advisors',          title: 'International Advisors' },
-  { id: 'core',              title: 'Core Researchers & Members' },
+  { id: 'core',              title: 'Core Researchers & Members', sortByContribution: true },
   { id: 'interdisciplinary', title: 'Interdisciplinary Researchers' },
   { id: 'former',            title: 'Former Members' }
 ];
@@ -68,7 +71,7 @@ window.NEURASEC_MEMBERS = [
     prefix: 'Dr.',
     name: 'Shahrzad Saremi',
     group: 'advisors',
-    role: 'Professor',
+    role: 'Lecturer · FHEA',
     institution: 'School of Science, Technology and Engineering, University of the Sunshine Coast',
     country: 'Australia', flag: '🇦🇺',
     location: { city: 'Sunshine Coast', lat: -26.65, lng: 153.07 },
@@ -181,16 +184,17 @@ window.NEURASEC_MEMBERS = [
     photo: 'abdul-mateen.jpg'
   },
   {
-    id: 'nida-ali',
-    name: 'Nida Ali',
+    id: 'furqan-ahmad',
+    name: 'Furqan Ahmad',
     group: 'core',
-    role: 'Researcher · Member',
-    institution: 'The University of Lahore',
-    country: 'Pakistan', flag: '🇵🇰',
-    location: { city: 'Lahore', lat: 31.39, lng: 74.24 },
-    expertise: ['Skill Development', 'Leadership'],
-    links: { linkedin: 'https://www.linkedin.com/in/nida-muhammad-ali-/' },
-    photo: 'nida-ali.jpg'
+    role: 'PhD Scholar',
+    institution: "Northwestern Polytechnical University, Xi'an",
+    country: 'China', flag: '🇨🇳',
+    location: { city: "Xi'an", lat: 34.24, lng: 108.91 },
+    expertise: ['AIoT', 'Edge Computing', 'TinyML', 'SDN & Network Automation', 'Smart Healthcare'],
+    email: 'furqanahmad272@gmail.com',
+    links: { linkedin: 'https://www.linkedin.com/in/furqanahmad272/' },
+    photo: 'furqan-ahmad.jpg'
   },
   {
     id: 'kanwal-naz',
@@ -216,6 +220,18 @@ window.NEURASEC_MEMBERS = [
       scholar: 'https://scholar.google.com/citations?user=SDwE_QYAAAAJ'
     },
     photo: 'bisma-ali.jpg'
+  },
+  {
+    id: 'hina-mehboob',
+    name: 'Hina Mehboob',
+    group: 'core',
+    role: 'Researcher · Member',
+    institution: 'National University of Sciences and Technology (NUST)',
+    country: 'Pakistan', flag: '🇵🇰',
+    location: { city: 'Islamabad', lat: 33.64, lng: 72.99 },
+    tags: ['BE Computer Software Engineering'],
+    links: { linkedin: 'https://www.linkedin.com/in/hina-mehboob-nust/' },
+    photo: 'hina-mehboob.jpg'
   },
   {
     id: 'ghalib-nadeem',
@@ -261,7 +277,8 @@ window.NEURASEC_MEMBERS = [
     institution: 'Department of Computer Science, National University of Computer and Emerging Sciences',
     country: 'Pakistan', flag: '🇵🇰',
     location: { city: 'Islamabad', lat: 33.64, lng: 72.99 },
-    links: { linkedin: 'https://www.linkedin.com/in/jav530/' }
+    links: { linkedin: 'https://www.linkedin.com/in/jav530/' },
+    photo: 'javeria-iqbal.jpg'
   },
   {
     id: 'nafiseh-faghani',
@@ -350,6 +367,18 @@ window.NEURASEC_MEMBERS = [
 
   /* ── Interdisciplinary Researchers ── */
   {
+    id: 'nida-ali',
+    name: 'Nida Ali',
+    group: 'interdisciplinary',
+    role: 'Researcher · Member',
+    institution: 'The University of Lahore',
+    country: 'Pakistan', flag: '🇵🇰',
+    location: { city: 'Lahore', lat: 31.39, lng: 74.24 },
+    expertise: ['Skill Development', 'Leadership'],
+    links: { linkedin: 'https://www.linkedin.com/in/nida-muhammad-ali-/' },
+    photo: 'nida-ali.jpg'
+  },
+  {
     id: 'muhammad-yousaf',
     name: 'Muhammad Yousaf',
     group: 'interdisciplinary',
@@ -418,6 +447,28 @@ window.NEURASEC_MEMBERS = [
     institution: 'Department of Industrial Engineering, Tsinghua University',
     country: 'China', flag: '🇨🇳',
     location: { city: 'Beijing', lat: 40.00, lng: 116.33 }
+  },
+  {
+    id: 'faria-hossain',
+    name: 'Faria Hossain',
+    group: 'interdisciplinary',
+    role: 'Researcher',
+    institution: 'Northern University Bangladesh',
+    country: 'Bangladesh', flag: '🇧🇩',
+    location: { city: 'Dhaka', lat: 23.87, lng: 90.40 },
+    links: { linkedin: 'https://www.linkedin.com/in/faria-hossain-b094a32b1' },
+    photo: 'faria-hossain.jpg'
+  },
+  {
+    id: 'abir-hasan-talha',
+    name: 'Abir Hasan Talha',
+    group: 'interdisciplinary',
+    role: 'Researcher',
+    institution: 'Northern University Bangladesh',
+    country: 'Bangladesh', flag: '🇧🇩',
+    location: { city: 'Dhaka', lat: 23.87, lng: 90.40 },
+    links: { linkedin: 'https://www.linkedin.com/in/abir-hasan-talha' },
+    photo: 'abir-hasan-talha.jpg'
   },
 
   /* ── Former Members ── */
