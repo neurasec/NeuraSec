@@ -7,10 +7,15 @@
   const esc = NS.esc;
   const root = document.getElementById('profile');
 
-  NS.renderChrome();
-
-  const id = new URLSearchParams(location.search).get('id');
+  // Built pages (people/<id>.html) carry the id in data-member; locally it comes from member.html?id=<id>.
+  const holder = document.querySelector('[data-member]');
+  const id = (holder && holder.dataset.member) || new URLSearchParams(location.search).get('id');
   const m = id && NS.member(id);
+
+  // An old member.html?id=… link on the deployed site -> the real profile page.
+  if (m && NS.staticProfiles && !holder) { location.replace(NS.profileUrl(m) + location.hash); return; }
+
+  NS.renderChrome();
 
   if (!m) {
     document.title = 'Member not found · NeuraSec';
@@ -36,7 +41,12 @@
   const facts = [];
   facts.push('<span>' + NS.country(m) + '</span>');
   if (m.location && m.location.city) facts.push('<span>' + NS.icon.pin + esc(m.location.city) + '</span>');
-  if (m.email) facts.push('<a href="mailto:' + esc(m.email) + '">' + NS.icon.mail + esc(m.email) + '</a>');
+  if (m.email && NS.showEmails) facts.push('<a href="mailto:' + esc(m.email) + '">' + NS.icon.mail + esc(m.email) + '</a>');
+  if (m.orcid) facts.push('<a class="orcid-link" href="https://orcid.org/' + esc(m.orcid) + '" target="_blank" rel="noopener">' + NS.icon.orcid + esc(m.orcid) + '</a>');
+  if (m.joined) {
+    const [jy, jm] = m.joined.split('-').map(Number);
+    facts.push('<span>Joined ' + (jm ? new Date(jy, jm - 1, 1).toLocaleString('en-GB', { month: 'long', year: 'numeric' }) : jy) + '</span>');
+  }
 
   const tags = m.tags.map((t) => '<span class="kw kw--strong">' + esc(t) + '</span>')
     .concat(m.expertise.map((t) => '<span class="kw">' + esc(t) + '</span>')).join('');
@@ -50,7 +60,7 @@
 
   /* ── Contribution summary (J1, J4 … like a CV index) ── */
   const chipLine = (label, items) => items.length
-    ? '<div class="contrib-line"><dt>' + label + '</dt><dd>' + items.map((p) => NS.codeChip(p, '#pub-' + p.id)).join('') + '</dd></div>' : '';
+    ? '<div class="contrib-line"><dt>' + label + '</dt><dd>' + items.map((p) => NS.codeChip(p, location.pathname + location.search + '#pub-' + p.id)).join('') + '</dd></div>' : '';
   const countLine = (label, items) => items.length
     ? '<div class="contrib-line"><dt>' + label + '</dt><dd>' + items.length + ' manuscript' + (items.length > 1 ? 's' : '') + '</dd></div>' : '';
   const summary = chipLine('Journal publications', c.journal) + chipLine('Conference proceedings', c.conference) +
@@ -63,14 +73,18 @@
     : '';
 
   const newestFirst = (list) => list.slice().reverse();
+  const foldClosed = (window.NEURASEC_SETTINGS || {}).defaultPublicationView !== 'all';
+  const nMs = review.length + submitted.length + progress.length + m.led.length;
+  const manuscripts = nMs
+    ? '<details class="fold"' + (foldClosed ? '' : ' open') + '><summary><span>Manuscripts under review or in preparation</span> <span class="group__count">' + nMs + '</span></summary>' +
+      section('Under review', review) + section('Submitted — awaiting peer review', submitted) +
+      section('In progress', progress) + section('Projects led', m.led) + '</details>'
+    : '';
   const pubsHTML = m.pubs.length || m.led.length
     ? section('Journal articles', newestFirst(c.journal)) +
       section('Conference papers', newestFirst(c.conference)) +
       section('Book chapters', newestFirst(c.chapter)) +
-      section('Under review', review) +
-      section('Submitted — awaiting peer review', submitted) +
-      section('In progress', progress) +
-      section('Projects led', m.led)
+      manuscripts
     : '<div class="empty" style="margin-top:1.5rem">No NeuraSec papers are listed for ' + esc(name) + ' yet.</div>';
 
   const collabHTML = collaborators.length
@@ -112,10 +126,10 @@
           '<p class="profile-card__inst">' + esc(m.institution) + '</p>' +
           '<div class="profile-card__facts">' + facts.join('') + '</div>' +
           (tags ? '<div class="profile-card__tags">' + tags + '</div>' : '') +
-          '<div class="profile-card__links">' + NS.socialLinks(m, { email: true }) + '</div>' +
+          '<div class="profile-card__links">' + NS.socialLinks(m, { email: NS.showEmails }) + '</div>' +
         '</div>' +
       '</article>' +
-      '<div class="stats">' + stats.map(([n, l]) => '<div class="stat"><div class="stat__num">' + n + '</div><div class="stat__label">' + l + '</div></div>').join('') + '</div>' +
+      (m.pubs.length || m.led.length ? '<div class="stats">' + stats.map(([n, l]) => '<div class="stat"><div class="stat__num">' + n + '</div><div class="stat__label">' + l + '</div></div>').join('') + '</div>' : '') +
       '<div class="profile-layout">' +
         '<div>' +
           (summary ? '<div class="panel"><h2 class="panel__title">Research contributions</h2><dl>' + summary + '</dl>' +
@@ -136,6 +150,8 @@
     if (!location.hash.startsWith('#pub-')) return;
     const t = document.getElementById(location.hash.slice(1));
     if (!t) return;
+    const fold = t.closest('details');
+    if (fold) fold.open = true;
     const y = t.getBoundingClientRect().top + window.scrollY - (window.innerHeight - t.offsetHeight) / 2;
     window.scrollTo({ top: Math.max(0, y), behavior: smooth ? 'smooth' : 'instant' });
     t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash');

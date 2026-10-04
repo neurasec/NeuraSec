@@ -1,0 +1,14 @@
+{
+  "name": "NeuraSec Research Group",
+  "short_name": "NeuraSec",
+  "description": "Advancing AI Security and Intelligent Systems.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#07122b",
+  "theme_color": "#07122b",
+  "icons": [
+    { "src": "images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "images/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

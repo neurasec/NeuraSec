@@ -55,7 +55,7 @@ window.NEURASEC_PUBLICATIONS = [
   {
     id: 'coi-peer-learning-2026',
     title: 'An Extended Community of Inquiry Framework for Monitoring and Predicting Online Peer Learning Participation',
-    authors: ['Mohsen Dokhanchi', 'Shahrzad Saremi', 'Rania Shibl', 'Maryam Heidari', 'Hassan Ahmed', 'Dahlia Mansoor', 'Yassine Himeur', 'Mohammad Alzaffin', 'Shadi Atalla', 'Wathiq Mansoor'],
+    authors: ['Mohsen Dokhanchi', 'Shahrzad Saremi', 'Rania Shibl', 'Maryam Heidari', 'Hassan Ahmed', 'Dahlia Mansoor', 'Yassine Himeur', 'Mohammad Al-Zaffin', 'Shadi Atalla', 'Wathiq Mansoor'],
     year: 2026, type: 'journal', status: 'published',
     venue: 'Journal of Applied Research in Higher Education',
     details: 'Vol. 18, No. 8, pp. 113–141',
@@ -258,14 +258,14 @@ window.NEURASEC_PUBLICATIONS = [
   {
     id: 'ae-rf-ddos-2026',
     title: 'Hybrid Autoencoder–Random Forest Framework for DDoS Intrusion Detection with Leakage-Aware Normalization',
-    authors: ['Marzieh Varposhti', 'Mansoureh Mirzaei', 'Maryam Nooraei Abadeh', 'Shahrzad Saremi', 'Hassan Ahmed', 'Rania Shibl', 'Abdullah Khan', 'Thanh Thi Nguyen'],
+    authors: ['Marzieh Varposhti', 'Mansooreh Mirzaei', 'Maryam Nooraei Abadeh', 'Shahrzad Saremi', 'Hassan Ahmed', 'Rania Shibl', 'Abdullah Khan', 'Thanh Thi Nguyen'],
     year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
     keywords: ['DDoS', 'Autoencoder', 'Random Forest', 'Intrusion Detection']
   },
   {
     id: 'genai-creative-partner-2026',
     title: 'GenAI as a Creative Partner: Design Thinking, Ethics, and Student Outcomes in Higher Education',
-    authors: ['Shahrzad Saremi', 'Mansoureh Mirzaei', 'Maryam Abadeh', 'Ahmad Rasti', 'Hassan Ahmed', 'Shaden AlDkheel', 'Mohsen Dokhanchi', 'Katie Wang', 'Erica Mealy', 'Joy Galaige', 'Syed Zaidi'],
+    authors: ['Shahrzad Saremi', 'Mansooreh Mirzaei', 'Maryam Nooraei Abadeh', 'Ahmad Rasti', 'Hassan Ahmed', 'Shaden AlDkheel', 'Mohsen Dokhanchi', 'Katie Wang', 'Erica Mealy', 'Joy Galaige', 'Syed Zaidi'],
     year: 2026, type: 'journal', status: 'review',
     venue: 'Artificial Intelligence in Education', details: 'Emerald Publishing',
     keywords: ['Generative AI', 'Design Thinking', 'Ethics', 'Higher Education']
@@ -323,7 +323,7 @@ window.NEURASEC_PUBLICATIONS = [
   {
     id: 'genai-dark-side-2026',
     title: 'The Dark Side of GenAI in Education: A Bibliometric Analysis of Risks to Motivation, Pedagogy, and Long-Term Learning Outcomes',
-    authors: ['Jie Zhu', 'Shahrzad Saremi', 'Rania Shibl', 'Mostafa Kamalpour', 'Hassan Ahmed', 'Mansoureh Mirzaei', 'Mingzhong Wang'],
+    authors: ['Jie Zhu', 'Shahrzad Saremi', 'Rania Shibl', 'Mostafa Kamalpour', 'Hassan Ahmed', 'Mansooreh Mirzaei', 'Mingzhong Wang'],
     year: 2026, type: 'journal', status: 'submitted',
     venue: 'Scientometrics', details: 'Springer Nature',
     keywords: ['Generative AI', 'Education', 'Bibliometrics']
@@ -363,7 +363,7 @@ window.NEURASEC_PUBLICATIONS = [
   {
     id: 'ai-business-analytics-2026',
     title: 'The Evolution of AI-Driven Business Analytics: A Scientometric Review of Global Research Trends, Knowledge Structures, and Future Directions',
-    authors: ['Mansoureh Mirzai', 'Mostafa Kamalpour', 'Maryam Nooraei Abadeh', 'Shahrzad Saremi', 'Rania Shibl', 'Hassan Ahmed', 'Erica Mealy', 'Tianwa Chen'],
+    authors: ['Mansooreh Mirzaei', 'Mostafa Kamalpour', 'Maryam Nooraei Abadeh', 'Shahrzad Saremi', 'Rania Shibl', 'Hassan Ahmed', 'Erica Mealy', 'Tianwa Chen'],
     year: 2026, type: 'journal', status: 'submitted',
     venue: 'Journal of Knowledge Management', details: 'Emerald Publishing',
     keywords: ['Business Analytics', 'Scientometrics', 'AI']
@@ -403,7 +403,7 @@ window.NEURASEC_PUBLICATIONS = [
   {
     id: 'himalayan-wolf-optimization-2026',
     title: 'Himalayan Wolf Optimization: A Novel Nature-Inspired Metaheuristic Algorithm for Global Optimization Problems',
-    authors: ['Marzieh Varposhti', 'Mansoureh Mirzaei', 'Maryam Nooraei Abadeh', 'Shahrzad Saremi', 'Rania Shibl', 'Hassan Ahmed', 'Li-Minn Ang'],
+    authors: ['Marzieh Varposhti', 'Mansooreh Mirzaei', 'Maryam Nooraei Abadeh', 'Shahrzad Saremi', 'Rania Shibl', 'Hassan Ahmed', 'Li-Minn Ang'],
     year: 2026, type: 'journal', status: 'submitted',
     venue: 'The Journal of Supercomputing', details: 'Springer',
     keywords: ['Metaheuristics', 'Optimisation', 'Nature-Inspired Algorithms']

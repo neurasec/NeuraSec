@@ -12,6 +12,9 @@
       linked to people. If a paper spells the name differently,
       add that spelling to `aliases`.
 
+   Optional fields: `orcid` (just the 16-digit iD), `joined` ('YYYY-MM'),
+   `tags`, `expertise`, `email`, `links.website`.
+
    group: leadership | advisors | core | interdisciplinary | former
    Groups marked `sortByContribution` are ordered automatically by
    papers (published/accepted count 2, others 1); elsewhere the
@@ -19,11 +22,11 @@
    ============================================================ */
 
 window.NEURASEC_GROUPS = [
-  { id: 'leadership',        title: 'Leadership' },
-  { id: 'advisors',          title: 'International Advisors' },
-  { id: 'core',              title: 'Core Researchers & Members', sortByContribution: true },
-  { id: 'interdisciplinary', title: 'Interdisciplinary Researchers' },
-  { id: 'former',            title: 'Former Members' }
+  { id: 'leadership',        title: 'Leadership',                    short: 'Leadership' },
+  { id: 'advisors',          title: 'International Advisors',        short: 'Advisors' },
+  { id: 'core',              title: 'Core Researchers & Members',    short: 'Core', sortByContribution: true },
+  { id: 'interdisciplinary', title: 'Interdisciplinary Researchers', short: 'Interdisciplinary' },
+  { id: 'former',            title: 'Former Members',                short: 'Former' }
 ];
 
 window.NEURASEC_MEMBERS = [
@@ -31,6 +34,7 @@ window.NEURASEC_MEMBERS = [
   /* ── Leadership ── */
   {
     id: 'hassan-ahmed',
+    orcid: '0009-0008-4348-3360',
     name: 'Hassan Ahmed',
     group: 'leadership',
     role: 'Founder · Lead Researcher',
@@ -49,6 +53,7 @@ window.NEURASEC_MEMBERS = [
   },
   {
     id: 'abdullah-khan',
+    orcid: '0009-0002-9684-1113',
     name: 'Abdullah Khan',
     group: 'leadership',
     role: 'Co-Founder · Research Lead',
@@ -68,6 +73,7 @@ window.NEURASEC_MEMBERS = [
   /* ── International Advisors ── */
   {
     id: 'shahrzad-saremi',
+    orcid: '0009-0005-9012-3999',
     prefix: 'Dr.',
     name: 'Shahrzad Saremi',
     group: 'advisors',
@@ -85,6 +91,7 @@ window.NEURASEC_MEMBERS = [
   },
   {
     id: 'rania-shibl',
+    orcid: '0000-0001-9355-1300',
     prefix: 'Dr.',
     name: 'Rania Shibl',
     group: 'advisors',
@@ -102,6 +109,7 @@ window.NEURASEC_MEMBERS = [
   },
   {
     id: 'tanja-pavleska',
+    orcid: '0009-0007-3967-2911',
     prefix: 'Dr.',
     name: 'Tanja Pavleska',
     group: 'advisors',
@@ -119,6 +127,7 @@ window.NEURASEC_MEMBERS = [
   },
   {
     id: 'imane-guellil',
+    orcid: '0000-0002-3858-3999',
     prefix: 'Dr.',
     name: 'Imane Guellil',
     group: 'advisors',
@@ -171,6 +180,7 @@ window.NEURASEC_MEMBERS = [
   /* ── Core Researchers & Members ── */
   {
     id: 'abdul-mateen',
+    orcid: '0000-0002-8607-7783',
     name: 'Abdul Mateen',
     group: 'core',
     role: 'Senior Researcher',
@@ -209,6 +219,7 @@ window.NEURASEC_MEMBERS = [
   },
   {
     id: 'bisma-ali',
+    orcid: '0009-0003-2732-3619',
     name: 'Bisma Ali',
     group: 'core',
     role: 'Researcher · Member',
@@ -249,6 +260,7 @@ window.NEURASEC_MEMBERS = [
   },
   {
     id: 'arooj-fatima',
+    orcid: '0009-0009-8061-9738',
     name: 'Arooj Fatima',
     group: 'core',
     role: 'Researcher · Member',
@@ -271,13 +283,14 @@ window.NEURASEC_MEMBERS = [
   },
   {
     id: 'javeria-iqbal',
+    orcid: '0009-0000-5685-5452',
     name: 'Javeria Iqbal',
     group: 'core',
     role: 'Researcher · Member',
     institution: 'Department of Computer Science, National University of Computer and Emerging Sciences',
     country: 'Pakistan', flag: '🇵🇰',
     location: { city: 'Islamabad', lat: 33.64, lng: 72.99 },
-    links: { linkedin: 'https://www.linkedin.com/in/jav530/' },
+    links: { linkedin: 'https://www.linkedin.com/in/jave530' },
     photo: 'javeria-iqbal.jpg'
   },
   {
@@ -347,7 +360,8 @@ window.NEURASEC_MEMBERS = [
     institution: 'Department of Computer Science, FAST-NUCES, Chiniot-Faisalabad Campus',
     country: 'Pakistan', flag: '🇵🇰',
     location: { city: 'Chiniot', lat: 31.72, lng: 72.98 },
-    links: { linkedin: 'https://www.linkedin.com/in/raja-muhammad-bilal-arshad/' }
+    links: { linkedin: 'https://www.linkedin.com/in/raja-muhammad-bilal-arshad/' },
+    photo: 'raja-muhammad-bilal-arshad.jpg'
   },
   {
     id: 'manar-makki-shaalan',
@@ -363,6 +377,20 @@ window.NEURASEC_MEMBERS = [
       scholar: 'https://scholar.google.com/citations?user=T4QkHMsAAAAJ'
     },
     photo: 'manar-makki.jpg'
+  },
+  {
+    id: 'amira-mahcene',
+    name: 'Amira Mahcene',
+    group: 'core',
+    role: 'Independent Researcher',
+    institution: 'Faculty of New Technologies of Information and Communication (NTIC), University of Constantine 2 – Abdelhamid Mehri',
+    country: 'Algeria', flag: '🇩🇿',
+    location: { city: 'Constantine', lat: 36.37, lng: 6.61 },
+    joined: '2026-07',
+    expertise: ['AI in Healthcare', 'Distributed Applications', 'Software Engineering', 'Web Development'],
+    tags: ['BSc Computer Software Engineering', 'Deputy Director · AJYAD Center'],
+    links: { linkedin: 'https://www.linkedin.com/in/amira-mahcene-a89a82207' },
+    photo: 'amira-mahcene.jpg'
   },
 
   /* ── Interdisciplinary Researchers ── */

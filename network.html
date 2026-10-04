@@ -4,18 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Global Reach · NeuraSec Research Group</title>
-  <meta name="description" content="Where NeuraSec members are based, and our partner institutions." />
+  <meta name="description" content="Where NeuraSec members are based, and the institutions they are affiliated with." />
   <meta name="theme-color" content="#07122b" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="NeuraSec Research Group" />
+  <meta property="og:title" content="Global Reach · NeuraSec Research Group" />
+  <meta property="og:description" content="Where NeuraSec members are based, and the institutions they are affiliated with." />
+  <meta property="og:image" content="https://neurasec.github.io/NeuraSec/images/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NeuraSec Research Group - Advancing AI Security and Intelligent Systems" />
+  <meta property="og:locale" content="en_GB" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/png" href="images/logo.png" />
-  <link rel="apple-touch-icon" href="images/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500;1,8..60,600&display=swap" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <link rel="stylesheet" href="css/neurasec.css" />
-  <script>
-    try { var t = localStorage.getItem('neurasec-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-  </script>
+  <script src="js/theme-init.js"></script>
 </head>
 <body data-page="network">
 
@@ -27,7 +33,7 @@
     <span class="eyebrow">Global reach</span>
     <h1 class="page-hero__title">Where we are</h1>
     <p class="page-hero__sub">NeuraSec brings together researchers and advisors from across Asia, Australia, Europe and the Middle East.</p>
-    <div class="page-hero__facts"><span class="page-hero__fact"><b data-count="countries">–</b>countries</span><span class="page-hero__fact"><b data-count="members">–</b>people</span><span class="page-hero__fact"><b data-count="partners">–</b>partner institutions</span></div>
+    <div class="page-hero__facts"><span class="page-hero__fact"><b data-count="countries">–</b>countries</span><span class="page-hero__fact"><b data-count="members">–</b>people</span><span class="page-hero__fact"><b data-count="partners">–</b>affiliated institutions</span></div>
   </div>
 </section>
 
@@ -54,9 +60,9 @@
 <section class="section section--alt" aria-labelledby="partners-heading">
   <div class="container">
     <div class="section-head reveal">
-      <span class="eyebrow">Network</span>
-      <h2 class="section-title" id="partners-heading">Partner institutions</h2>
-      <p class="section-sub">Institutions contributing to joint research.</p>
+      <span class="eyebrow">Affiliations</span>
+      <h2 class="section-title" id="partners-heading">Member affiliations</h2>
+      <p class="section-sub">Institutions where our members and advisors are based.</p>
     </div>
     <div class="partners" id="partnerList"></div>
   </div>
@@ -69,7 +75,7 @@
 <script src="data/publications.js"></script>
 <script src="data/site.js"></script>
 <script src="js/common.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="vendor/leaflet/leaflet.js"></script>
 <script src="js/pages.js"></script>
 </body>
 </html>

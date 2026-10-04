@@ -1,0 +1,66 @@
+# Checks the site's data, builds the deployable copy (tools/build.py) and publishes it to GitHub Pages.
+# Pull requests only run the checks and the build; pushes to main also deploy.
+name: Check, build and deploy
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Stops the deploy on real mistakes: a syntax error in a data file, a duplicate id,
+      # a missing photo or logo, a malformed ORCID iD or DOI ...
+      - name: Validate data and assets
+        run: python tools/validate.py
+
+      # Informational: warns about DOIs that Crossref does not know yet. Never blocks the deploy.
+      - name: Check DOIs against Crossref
+        continue-on-error: true
+        run: python tools/validate.py --online
+
+      - name: Build site
+        run: python tools/build.py --out _site
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+
+      # Every script, stylesheet, image and page that a built page refers to must exist.
+      - name: Check links in the built site
+        run: python tools/check_links.py _site
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
