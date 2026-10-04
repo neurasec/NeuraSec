@@ -6,15 +6,21 @@
   <title>NeuraSec Research Group</title>
   <meta name="description" content="NeuraSec Research Group — advancing AI security and intelligent systems through research in cybersecurity, deep learning, NLP and explainable AI." />
   <meta name="theme-color" content="#07122b" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="NeuraSec Research Group" />
+  <meta property="og:title" content="NeuraSec Research Group" />
+  <meta property="og:description" content="NeuraSec Research Group — advancing AI security and intelligent systems through research in cybersecurity, deep learning, NLP and explainable AI." />
+  <meta property="og:image" content="https://neurasec.github.io/NeuraSec/images/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="NeuraSec Research Group - Advancing AI Security and Intelligent Systems" />
+  <meta property="og:locale" content="en_GB" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/png" href="images/logo.png" />
-  <link rel="apple-touch-icon" href="images/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;1,8..60,500;1,8..60,600&display=swap" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="css/neurasec.css" />
-  <script>
-    try { var t = localStorage.getItem('neurasec-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-  </script>
+  <script src="js/theme-init.js"></script>
 </head>
 <body data-page="home">
 
@@ -38,12 +44,19 @@
   </div>
 </section>
 
+<section class="marquee-band" aria-label="Institutions our members are affiliated with">
+  <div class="marquee-band__bar">
+    <p class="marquee-band__label">Collaborating with researchers at</p>
+    <button type="button" class="mq__pause" id="mqPause" aria-pressed="false">Pause</button>
+  </div>
+  <div class="mq" id="marquee"></div>
+</section>
+
 <section class="section" aria-labelledby="explore-heading">
   <div class="container">
     <div class="section-head reveal">
       <span class="eyebrow">Explore</span>
       <h2 class="section-title" id="explore-heading">Inside NeuraSec</h2>
-      <p class="section-sub">Our research, papers, people and network, each on its own page.</p>
     </div>
     <div class="explore">
       <a class="tile reveal" href="research.html">
@@ -71,7 +84,7 @@
         <span class="tile__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.9 3.8 5.9 3.8 9s-1.2 6.1-3.8 9c-2.6-2.9-3.8-5.9-3.8-9S9.4 5.9 12 3z"/></g></svg></span>
         <span class="tile__num" data-count="countries">–</span>
         <span class="tile__title">Global reach</span>
-        <span class="tile__desc">Where our members are based, on an interactive map, and our partner institutions.</span>
+        <span class="tile__desc">Where our members are based, on an interactive map, and the institutions they are affiliated with.</span>
         <span class="tile__go">See the map <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
       <a class="tile reveal" href="news.html">

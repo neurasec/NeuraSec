@@ -17,6 +17,9 @@
   const peerReviewed = NS.publications.filter((p) => p.numbered).length;
   const pipeline = NS.publications.length - peerReviewed;
   const news = window.NEURASEC_NEWS || [];
+  // 'peer' (default): the Publications page lists published + accepted papers; manuscripts are one click away.
+  const VIEW = (window.NEURASEC_SETTINGS || {}).defaultPublicationView === 'all' ? 'all' : 'peer';
+  const isPublic = (p) => VIEW === 'all' || p.numbered;
 
   const fmtDate = (s) => {
     const [y, m] = s.split('-').map(Number);
@@ -59,8 +62,10 @@
   (function heroCanvas() {
     const canvas = $('#heroCanvas');
     if (!canvas || !canvas.getContext) return;
+    if (window.matchMedia('(max-width: 700px)').matches) { canvas.hidden = true; return; }   // saves battery on phones
     const ctx = canvas.getContext('2d');
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce = false;                      // kept for readability; see still() below
+    const still = () => NS.motionOff();        // true when the visitor paused animations or prefers reduced motion
     let w, h, dpr, nodes = [], running = true, raf;
     const mouse = { x: -1e4, y: -1e4 };
 
@@ -82,7 +87,7 @@
       const maxD = 130;
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
-        if (!reduce) {
+        if (!still()) {
           a.x += a.vx; a.y += a.vy;
           if (a.x < 0 || a.x > w) a.vx *= -1;
           if (a.y < 0 || a.y > h) a.vy *= -1;
@@ -104,19 +109,20 @@
         ctx.fillStyle = md < 180 ? 'rgba(61,214,195,.95)' : 'rgba(190,210,255,.75)';
         ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2); ctx.fill();
       }
-      if (running && !reduce) raf = requestAnimationFrame(frame);
+      if (running && !still()) raf = requestAnimationFrame(frame);
     }
 
     resize(); frame();
     let rt;
-    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { resize(); if (reduce) frame(); }, 150); });
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { resize(); if (still()) frame(); }, 150); });
     const hero = canvas.parentElement;
     hero.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
     hero.addEventListener('pointerleave', () => { mouse.x = mouse.y = -1e4; });
-    if ('IntersectionObserver' in window && !reduce) {
+    document.addEventListener('ns:motion', () => { cancelAnimationFrame(raf); if (still()) frame(); else raf = requestAnimationFrame(frame); });
+    if ('IntersectionObserver' in window) {
       new IntersectionObserver(([en]) => {
         const was = running; running = en.isIntersecting;
-        if (running && !was) { cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); }
+        if (running && !was && !still()) { cancelAnimationFrame(raf); raf = requestAnimationFrame(frame); }
       }).observe(hero);
     }
   })();
@@ -138,15 +144,23 @@
 
   if ($('#pubList')) {
     const params = new URLSearchParams(location.search);
-    const state = { q: '', status: 'all', type: 'all', member: NS.member(params.get('member')) ? params.get('member') : '' };
-    const STATUS_FILTERS = [['all', 'All'], ['published', 'Published'], ['accepted', 'Accepted'], ['review', 'Under review'], ['submitted', 'Submitted'], ['progress', 'In progress']]
-      .filter(([k]) => k === 'all' || NS.publications.some((p) => p.status === k));
+    const defaultStatus = VIEW === 'peer' ? 'peer' : 'all';
+    const validStatus = (k) => k === 'peer' || k === 'all' || !!NS.STATUS[k];
+    const state = {
+      q: (params.get('q') || '').trim().toLowerCase(),
+      status: validStatus(params.get('status')) ? params.get('status') : defaultStatus,
+      type: 'all',
+      member: NS.member(params.get('member')) ? params.get('member') : ''
+    };
+    const STATUS_FILTERS = [['peer', 'Published & accepted'], ['all', 'All'], ['published', 'Published'], ['accepted', 'Accepted'],
+      ['review', 'Under review'], ['submitted', 'Submitted'], ['progress', 'In progress']]
+      .filter(([k]) => k === 'peer' || k === 'all' || NS.publications.some((p) => p.status === k));
     const TYPE_FILTERS = [['all', 'All types'], ['journal', 'Journal'], ['conference', 'Conference']];
-    const count = (fn) => NS.publications.filter(fn).length;
+    const countFor = (k) => k === 'all' ? NS.publications.length : k === 'peer' ? peerReviewed : NS.publications.filter((p) => p.status === k).length;
 
     $('#pubStatus').innerHTML = STATUS_FILTERS.map(([k, l]) =>
-      '<button class="chip" type="button" data-k="' + k + '" aria-pressed="' + (k === 'all') + '">' + l +
-      ' <span class="chip__n">' + count((p) => k === 'all' || p.status === k) + '</span></button>').join('');
+      '<button class="chip" type="button" data-k="' + k + '" aria-pressed="' + (k === state.status) + '">' + l +
+      ' <span class="chip__n">' + countFor(k) + '</span></button>').join('');
     $('#pubType').innerHTML = TYPE_FILTERS.map(([k, l]) =>
       '<button class="chip" type="button" data-k="' + k + '" aria-pressed="' + (k === 'all') + '">' + l + '</button>').join('');
 
@@ -155,14 +169,16 @@
     $('#pubMember').innerHTML = '<option value="">All members</option>' +
       withPubs.map((m) => '<option value="' + m.id + '">' + esc(NS.displayName(m)) + ' (' + m.pubs.length + ')</option>').join('');
     $('#pubMember').value = state.member;
+    $('#pubSearch').value = params.get('q') || '';
 
-    const bindChips = (el, key) => el.addEventListener('click', (e) => {
+    const paintChips = () => document.querySelectorAll('#pubStatus .chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.k === state.status)));
+    const setStatus = (k) => { state.status = k; paintChips(); renderPubs(); };
+    $('#pubStatus').addEventListener('click', (e) => { const b = e.target.closest('.chip'); if (b) setStatus(b.dataset.k); });
+    $('#pubType').addEventListener('click', (e) => {
       const b = e.target.closest('.chip'); if (!b) return;
-      el.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
-      state[key] = b.dataset.k; renderPubs();
+      document.querySelectorAll('#pubType .chip').forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+      state.type = b.dataset.k; renderPubs();
     });
-    bindChips($('#pubStatus'), 'status');
-    bindChips($('#pubType'), 'type');
     let qt;
     $('#pubSearch').addEventListener('input', (e) => { clearTimeout(qt); qt = setTimeout(() => { state.q = e.target.value.trim().toLowerCase(); renderPubs(); }, 120); });
     $('#pubMember').addEventListener('change', (e) => {
@@ -175,51 +191,68 @@
 
     const haystack = (p) => (p._hay = p._hay || [p.title, p.venue, p.details, p.code, p.year, p.lead]
       .concat(p.authors, p.keywords).filter(Boolean).join(' ').toLowerCase());
+    const matches = (p, withStatus) =>
+      (!withStatus || state.status === 'all' || (state.status === 'peer' ? p.numbered : p.status === state.status)) &&
+      (state.type === 'all' || p.type === state.type) &&
+      (!state.member || p.authorMembers.some((m) => m && m.id === state.member) || (p.leadMember && p.leadMember.id === state.member)) &&
+      (!state.q || state.q.split(/\s+/).every((t) => haystack(p).includes(t)));
 
+    let shown = [];
+    const exportBtn = $('#pubExport');
     function renderPubs() {
-      const list = NS.publications.filter((p) =>
-        (state.status === 'all' || p.status === state.status) &&
-        (state.type === 'all' || p.type === state.type) &&
-        (!state.member || p.authorMembers.some((m) => m && m.id === state.member) || (p.leadMember && p.leadMember.id === state.member)) &&
-        (!state.q || state.q.split(/\s+/).every((t) => haystack(p).includes(t))));
-
-      const filtered = state.q || state.member || state.status !== 'all' || state.type !== 'all';
+      const list = NS.publications.filter((p) => matches(p, true));
+      shown = list;
+      const narrowed = state.q || state.member || state.type !== 'all' || state.status !== defaultStatus;
       const who = state.member ? NS.member(state.member) : null;
-      $('#pubNote').innerHTML = filtered
+      const hidden = NS.publications.length - peerReviewed;
+      $('#pubNote').innerHTML = narrowed
         ? 'Showing ' + list.length + ' of ' + NS.publications.length + ' papers' +
           (who ? ' by <a href="' + NS.profileUrl(who) + '">' + esc(NS.displayName(who)) + '</a>' : '') +
           ' · <button type="button" id="pubReset">Clear filters</button>'
-        : NS.publications.length + ' papers · ' + peerReviewed + ' published or accepted';
-      const reset = $('#pubReset');
-      if (reset) reset.addEventListener('click', resetFilters);
+        : VIEW === 'peer'
+          ? peerReviewed + ' published and accepted papers · <button type="button" id="pubShowAll">Include ' + hidden + ' manuscripts under review or submitted</button>'
+          : NS.publications.length + ' papers · ' + peerReviewed + ' published or accepted';
+      const reset = $('#pubReset'); if (reset) reset.addEventListener('click', resetFilters);
+      const all = $('#pubShowAll'); if (all) all.addEventListener('click', () => setStatus('all'));
+      if (exportBtn) { exportBtn.disabled = !list.length; exportBtn.querySelector('span').textContent = 'Download BibTeX (' + list.length + ')'; }
 
-      if (!list.length) { $('#pubList').innerHTML = '<div class="empty">No papers match these filters.</div>'; return; }
+      if (!list.length) {
+        const extra = state.status === 'peer' ? NS.publications.filter((p) => matches(p, false)).length : 0;
+        $('#pubList').innerHTML = '<div class="empty">No ' + (state.status === 'peer' ? 'published or accepted ' : '') + 'papers match these filters.' +
+          (extra ? '<br><button type="button" class="linklike" id="pubEmptyAll">Show the ' + extra + ' matching manuscript' + (extra > 1 ? 's' : '') + ' under review or submitted</button>' : '') + '</div>';
+        const b = $('#pubEmptyAll'); if (b) b.addEventListener('click', () => setStatus('all'));
+        return;
+      }
 
       const years = [];
       list.forEach((p) => { let y = years.find((g) => g.year === p.year); if (!y) years.push(y = { year: p.year, items: [] }); y.items.push(p); });
       $('#pubList').innerHTML = years.map((g) =>
-        '<h3 class="pub-year">' + g.year + ' <small>' + g.items.length + (g.items.length === 1 ? ' paper' : ' papers') + '</small></h3>' +
+        '<h2 class="pub-year">' + g.year + ' <small>' + g.items.length + (g.items.length === 1 ? ' paper' : ' papers') + '</small></h2>' +
         '<div class="pubs">' + g.items.map((p) => NS.pubHTML(p, { self: state.member })).join('') + '</div>').join('');
     }
 
     function resetFilters() {
-      Object.assign(state, { q: '', status: 'all', type: 'all', member: '' });
+      Object.assign(state, { q: '', status: defaultStatus, type: 'all', member: '' });
       $('#pubSearch').value = ''; $('#pubMember').value = '';
       history.replaceState(null, '', location.pathname);
-      document.querySelectorAll('#pubStatus .chip, #pubType .chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.k === 'all')));
+      paintChips();
+      document.querySelectorAll('#pubType .chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.k === 'all')));
       renderPubs();
     }
+    if (exportBtn) exportBtn.addEventListener('click', () => { if (shown.length) { NS.downloadBib(shown, 'neurasec-publications.bib'); NS.toast('BibTeX file downloaded'); } });
     renderPubs();
 
     // Jump to a paper linked from another page (publications.html#pub-xyz)
-    if (location.hash.startsWith('#pub-')) {
-      setTimeout(() => {
-        const t = document.getElementById(location.hash.slice(1));
-        if (!t) return;
-        window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - (window.innerHeight - t.offsetHeight) / 2, behavior: 'instant' });
-        t.classList.add('flash');
-      }, 80);
-    }
+    const jump = (smooth) => {
+      if (!location.hash.startsWith('#pub-')) return;
+      let t = document.getElementById(location.hash.slice(1));
+      if (!t) { Object.assign(state, { q: '', type: 'all', member: '' }); $('#pubSearch').value = ''; $('#pubMember').value = ''; setStatus('all'); t = document.getElementById(location.hash.slice(1)); }
+      if (!t) return;
+      window.scrollTo({ top: Math.max(0, t.getBoundingClientRect().top + window.scrollY - (window.innerHeight - t.offsetHeight) / 2), behavior: smooth ? 'smooth' : 'instant' });
+      t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash');
+    };
+    setTimeout(() => jump(false), 80);
+    window.addEventListener('hashchange', () => jump(true));
   }
 
   /* ════════════ PEOPLE ════════════ */
@@ -237,10 +270,10 @@
     };
 
     const cardHTML = (m, featured) =>
-      '<article class="person' + (m.group === 'former' ? ' person--former' : '') + ' reveal">' +
+      '<article class="person person--g-' + m.group + (m.group === 'former' ? ' person--former' : '') + ' reveal">' +
         '<div class="person__photo">' + NS.avatar(m) + '</div>' +
         '<div class="person__body">' +
-        '<h4 class="person__name"><a href="' + NS.profileUrl(m) + '">' + esc(NS.displayName(m)) + '</a></h4>' +
+        '<h3 class="person__name"><a href="' + NS.profileUrl(m) + '">' + esc(NS.displayName(m)) + '</a></h3>' +
         '<div class="person__role">' + esc(m.role) + '</div>' +
         '<p class="person__inst">' + esc(m.institution) + '</p>' +
         '<div class="person__country">' + NS.country(m) + '</div>' +
@@ -270,7 +303,7 @@
     if (groupNav) {
       groupNav.innerHTML = NS.groups.map((g) => {
         const n = NS.members.filter((m) => m.group === g.id).length;
-        return n ? '<a class="chip" href="#g-' + g.id + '">' + esc(g.title) + ' <span class="chip__n">' + n + '</span></a>' : '';
+        return n ? '<a class="chip" href="#g-' + g.id + '">' + esc(g.short || g.title) + ' <span class="chip__n">' + n + '</span></a>' : '';
       }).join('');
     }
 
@@ -354,12 +387,45 @@
     setTimeout(fit, 300);
   })();
 
+  const mono = (name) => name.replace(/[,&]/g, ' ').split(/\s+/)
+    .filter((w) => w && !/^(of|the|and|for)$/i.test(w)).map((w) => w[0]).join('').toUpperCase().slice(0, 4);
+
+  /** Logo tile for a partner; falls back to initials when no logo file is set. */
+  const logoMark = (p, cls) => '<span class="' + cls + '" aria-hidden="true">' +
+    (p.logo ? '<img src="' + esc(p.logo) + '" alt="" loading="lazy" decoding="async" data-fb="' + esc(mono(p.name)) + '">' : esc(mono(p.name))) + '</span>';
+
+  if ($('#marquee')) {
+    const chips = (window.NEURASEC_PARTNERS || []).map((p) =>
+      '<span class="mq__item">' + logoMark(p, 'mq__logo') +
+      '<span>' + esc(p.name) + '<small>' + esc(p.country) + '</small></span></span>').join('');
+    $('#marquee').innerHTML = '<div class="mq__track">' + chips + '</div><div class="mq__track" aria-hidden="true">' + chips + '</div>';
+    const pause = $('#mqPause');
+    if (pause) {
+      const paint = () => { const off = NS.motionOff(); pause.setAttribute('aria-pressed', String(off)); pause.textContent = off ? 'Play' : 'Pause'; };
+      pause.addEventListener('click', () => NS.setMotionOff(!NS.motionOff()));
+      document.addEventListener('ns:motion', paint); paint();
+    }
+  }
+
+  if ($('#topicCloud')) {
+    const tally = new Map();
+    NS.publications.filter(isPublic).forEach((p) => p.keywords.forEach((k) => tally.set(k, (tally.get(k) || 0) + 1)));
+    const top = [...tally.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 42);
+    const max = top.length ? top[0][1] : 1;
+    $('#topicCloud').innerHTML = top.sort((a, b) => a[0].localeCompare(b[0])).map(([k, n]) =>
+      '<a class="topic" style="--w:' + (n / max).toFixed(2) + '" href="publications.html?q=' + encodeURIComponent(k) + '" title="' + n + (n === 1 ? ' paper' : ' papers') + '">' +
+      esc(k) + (n > 1 ? '<b>' + n + '</b>' : '') + '</a>').join('');
+  }
+
   if ($('#partnerList')) {
-    const mono = (name) => name.replace(/[,&]/g, ' ').split(/\s+/)
-      .filter((w) => w && !/^(of|the|and|for)$/i.test(w)).map((w) => w[0]).join('').toUpperCase().slice(0, 4);
-    $('#partnerList').innerHTML = (window.NEURASEC_PARTNERS || []).map((p) =>
-      '<div class="partner reveal"><span class="partner__mono" aria-hidden="true">' + esc(mono(p.name)) + '</span>' +
-      '<div><div class="partner__name">' + esc(p.name) + '</div><div class="partner__meta">' + esc(p.kind) + ' · ' + esc(p.country) + '</div></div></div>').join('');
+    $('#partnerList').innerHTML = (window.NEURASEC_PARTNERS || []).map((p) => {
+      const inner = logoMark(p, 'partner__logo') +
+        '<div class="partner__text"><div class="partner__name">' + esc(p.name) + '</div><div class="partner__meta">' + esc(p.kind) + ' · ' + esc(p.country) + '</div></div>' +
+        (p.url ? '<span class="partner__go" aria-hidden="true">' + NS.icon.external + '</span>' : '');
+      return p.url
+        ? '<a class="partner reveal" href="' + esc(p.url) + '" target="_blank" rel="noopener" aria-label="' + esc(p.name) + ' (opens website)">' + inner + '</a>'
+        : '<div class="partner reveal">' + inner + '</div>';
+    }).join('');
   }
 
   /* ════════════ NEWS (full list, or the latest few with data-limit) ════════════ */
@@ -393,15 +459,31 @@
 
   /* ════════════ JOIN: tabs ════════════ */
 
-  const tabs = [...document.querySelectorAll('[role="tablist"] [role="tab"]')];
-  tabs.forEach((tab) => tab.addEventListener('click', () => {
-    tabs.forEach((t) => {
-      const on = t === tab;
-      t.setAttribute('aria-selected', String(on));
-      t.setAttribute('aria-pressed', String(on));
-      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+  document.querySelectorAll('[role="tablist"]').forEach((list) => {
+    const tabs = [...list.querySelectorAll('[role="tab"]')];
+    const select = (tab, focus) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls'));
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab, false));
+      tab.addEventListener('keydown', (e) => {
+        let n = -1;
+        if (e.key === 'ArrowRight') n = (i + 1) % tabs.length;
+        else if (e.key === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length;
+        else if (e.key === 'Home') n = 0;
+        else if (e.key === 'End') n = tabs.length - 1;
+        if (n >= 0) { e.preventDefault(); select(tabs[n], true); }
+      });
     });
-  }));
+    select(tabs.find((t) => t.getAttribute('aria-selected') === 'true') || tabs[0], false);
+  });
 
   NS.reveal();
 })();
