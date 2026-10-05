@@ -207,15 +207,18 @@ window.NEURASEC_MEMBERS = [
     photo: 'furqan-ahmad.jpg'
   },
   {
-    id: 'kanwal-naz',
-    name: 'Kanwal Naz',
+    id: 'samia-mujahid',
+    orcid: '0009-0007-8137-431X',
+    name: 'Samia Mujahid',
     group: 'core',
-    role: 'Researcher · Member',
-    institution: 'Department of Software Engineering, FAST-NUCES, Chiniot-Faisalabad Campus',
+    role: 'Lecturer',
+    institution: 'Department of Computer Science, FAST-NUCES, Chiniot-Faisalabad Campus',
     country: 'Pakistan', flag: '🇵🇰',
     location: { city: 'Chiniot', lat: 31.72, lng: 72.98 },
-    links: { linkedin: 'https://www.linkedin.com/in/kanwal-naz-a2257115a/' },
-    photo: 'kanwal-naz.jpg'
+    expertise: ['NLP', 'Healthcare AI', 'Large Language Models', 'Ethics & Privacy'],
+    email: 'samia.mujahid@nu.edu.pk',
+    links: { linkedin: 'https://www.linkedin.com/in/samia-mujahid-6459a9294/' },
+    photo: 'samia-mujahid.jpg'
   },
   {
     id: 'bisma-ali',
@@ -491,6 +494,16 @@ window.NEURASEC_MEMBERS = [
   },
 
   /* ── Former Members ── */
+  {
+    id: 'kanwal-naz',
+    name: 'Kanwal Naz',
+    group: 'former',
+    role: 'Former Member',
+    institution: 'Department of Software Engineering, FAST-NUCES, Chiniot-Faisalabad Campus',
+    country: 'Pakistan', flag: '🇵🇰',
+    links: { linkedin: 'https://www.linkedin.com/in/kanwal-naz-a2257115a/' },
+    photo: 'kanwal-naz.jpg'
+  },
   {
     id: 'yahya-younas',
     name: 'Yahya Younas',
