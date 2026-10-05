@@ -305,15 +305,6 @@ window.NEURASEC_MEMBERS = [
     photo: 'nafiseh-faghani.jpg'
   },
   {
-    id: 'aini-saba',
-    name: 'Aini Saba',
-    group: 'core',
-    role: 'Researcher · Member',
-    institution: 'Department of Computer Science, University of Wah, Wah Cantt',
-    country: 'Pakistan', flag: '🇵🇰',
-    location: { city: 'Wah Cantt', lat: 33.78, lng: 72.73 }
-  },
-  {
     id: 'zeshaan-ali',
     name: 'Zeshaan Ali',
     aliases: ['Zeeshan Ali'],
@@ -517,5 +508,13 @@ window.NEURASEC_MEMBERS = [
     institution: 'NUML, Pakistan',
     country: 'Pakistan', flag: '🇵🇰',
     links: { linkedin: 'https://www.linkedin.com/in/rabia-paracha-158081151/' }
+  },
+  {
+    id: 'aini-saba',
+    name: 'Aini Saba',
+    group: 'former',
+    role: 'Former Member',
+    institution: 'Department of Computer Science, University of Wah, Wah Cantt',
+    country: 'Pakistan', flag: '🇵🇰'
   }
 ];
