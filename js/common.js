@@ -225,6 +225,7 @@
     if (m.links.linkedin) out.push(['linkedin', m.links.linkedin, 'LinkedIn']);
     if (m.links.scholar) out.push(['scholar', m.links.scholar, 'Google Scholar']);
     if (m.orcid) out.push(['orcid', 'https://orcid.org/' + m.orcid, 'ORCID iD ' + m.orcid]);
+    if (m.links.academia) out.push(['globe', m.links.academia, 'Academia.edu']);
     if (m.links.website) out.push(['globe', m.links.website, 'Website']);
     if (opts.email && m.email) out.push(['mail', 'mailto:' + m.email, 'Email']);
     return out.map(([ic, href, label]) =>

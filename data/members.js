@@ -221,6 +221,20 @@ window.NEURASEC_MEMBERS = [
     photo: 'samia-mujahid.jpg'
   },
   {
+    id: 'khadija-arain',
+    name: 'Khadija Arain',
+    group: 'core',
+    role: 'Graduate Student',
+    institution: 'School of Electrical Engineering and Computer Science (SEECS), NUST Islamabad',
+    country: 'Pakistan', flag: '🇵🇰',
+    location: { city: 'Islamabad', lat: 33.64, lng: 72.99 },
+    links: {
+      linkedin: 'https://www.linkedin.com/in/khadija-arain-ba90b71b2/',
+      academia: 'https://nust.academia.edu/KhadijaArain'
+    },
+    photo: 'khadija-arain.jpg'
+  },
+  {
     id: 'bisma-ali',
     orcid: '0009-0003-2732-3619',
     name: 'Bisma Ali',
@@ -334,7 +348,8 @@ window.NEURASEC_MEMBERS = [
     institution: 'COMSATS University Islamabad, Wah Campus',
     country: 'Qatar', flag: '🇶🇦',
     location: { city: 'Doha', lat: 25.29, lng: 51.53 },
-    links: { linkedin: 'https://www.linkedin.com/in/sohaibahmed341/' }
+    links: { linkedin: 'https://www.linkedin.com/in/sohaibahmed341/' },
+    photo: 'sohaib-ahmed.jpg'
   },
   {
     id: 'saood-ahmed',
@@ -344,7 +359,8 @@ window.NEURASEC_MEMBERS = [
     institution: 'Department of Electrical Engineering, University of Management and Technology, Lahore',
     country: 'Pakistan', flag: '🇵🇰',
     location: { city: 'Lahore', lat: 31.45, lng: 74.29 },
-    links: { linkedin: 'https://www.linkedin.com/in/saood-ahmed/' }
+    links: { linkedin: 'https://www.linkedin.com/in/saood-ahmed/' },
+    photo: 'saood-ahmed.jpg'
   },
   {
     id: 'raja-muhammad-bilal-arshad',
@@ -511,7 +527,8 @@ window.NEURASEC_MEMBERS = [
     role: 'Former Member',
     institution: 'COMSATS University, Wah Campus',
     country: 'Pakistan', flag: '🇵🇰',
-    links: { linkedin: 'https://www.linkedin.com/in/yahyayounas/' }
+    links: { linkedin: 'https://www.linkedin.com/in/yahyayounas/' },
+    photo: 'yahya-younas.jpg'
   },
   {
     id: 'rabia-maqbool',
