@@ -14,6 +14,9 @@ window.NEURASEC_SETTINGS = {
 };
 
 window.NEURASEC_NEWS = [
+  { date: '2026-10', tag: 'Publication',
+    text: 'Crisis-induced hybrid learning, cognitive offloading and generative AI reliance among Pakistani CS undergraduates published in Education Innovations: Systems and Future Learning (Vol. 1, No. 1)',
+    publication: 'crisis-hybrid-learning-2026' },
   { date: '2026-10', tag: 'Membership',
     text: 'Four researchers join NeuraSec: Furqan Ahmad (PhD Scholar, Northwestern Polytechnical University, China), Hina Mehboob (NUST, Pakistan), and Faria Hossain and Abir Hasan Talha (Northern University Bangladesh)',
     members: ['furqan-ahmad', 'hina-mehboob', 'faria-hossain', 'abir-hasan-talha'] },
