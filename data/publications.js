@@ -30,6 +30,18 @@ window.NEURASEC_PUBLICATIONS = [
 
   /* ───────────── Published ───────────── */
   {
+    id: 'crisis-hybrid-learning-2026',
+    title: 'Crisis-Induced Hybrid Learning, Cognitive Offloading, and Generative AI Reliance Among Pakistani CS Undergraduates',
+    authors: ['Hassan Ahmed', 'Abdullah Khan', 'Arooj Fatima', 'Abdul Mateen', 'Shahrzad Saremi', 'Rania Shibl', 'Sadegh Rajaei', 'Mansooreh Mirzaei'],
+    year: 2026, type: 'journal', status: 'published',
+    venue: 'Education Innovations: Systems and Future Learning',
+    details: 'Vol. 1, No. 1, pp. 568–589 · Emerald Publishing',
+    doi: '10.1108/EISFL-06-2026-0098',
+    pdf: 'https://www.emerald.com/eisfl/article-pdf/1/1/568/11890957/eisfl-06-2026-0098en.pdf',
+    abstract: 'In spring 2026, geopolitical tensions prompted the Pakistani government to mandate full online instruction (10 March–3 April 2026), followed by a hybrid schedule for the rest of the semester. This shift is treated here as an externally imposed crisis context for AI adoption, not as a natural experiment. No pre-crisis baseline or control group was available. The study characterises generative AI (GenAI) adoption patterns and the psychological antecedents of AI dependency among undergraduate computer-science (CS) students during this window. Three hypotheses, grounded in the reviewed literature, structured the analysis. A cross-sectional survey was administered across Pakistani higher education institutions (HEIs) in April–May 2026. Of 360 responses collected, two incomplete records were removed, and a thirteen-criterion data-quality screen was applied, yielding N = 299. Fourteen constructs were operationalised from UTAUT, Cognitive Load Theory (CLT), Self-Determination Theory (SDT), and the AI Anxiety Scale (AIAS). Block-entry OLS regression and bootstrapped mediation (5,000 resamples) tested the hypotheses; ANOVA and Spearman correlations supported descriptive analysis of adoption patterns. Adoption was near-universal (>99%), with 45.2% of respondents reporting ≥ 31% of submitted work directly AI-generated. A three-block OLS regression explained 54.6% of variance in AI dependency. Cognitive offloading was the strongest predictor (β = 0.41, p < 0.001), followed by procrastination (β = 0.23, p < 0.001), extrinsic motivation (β = 0.17, p = 0.002), and intrinsic motivation as a protective factor (β = −0.13, p = 0.013). Bootstrapped mediation confirmed procrastination partially mediates the extrinsic motivation–dependency path (ab = 0.201, 95% BC-CI [0.122, 0.289]). To our knowledge, this is among the first studies to survey GenAI dependency during an active government-mandated crisis disruption in South Asian higher education. Contributions include a multi-theory construct battery adapted for a crisis context, a thirteen-criterion response-quality protocol, and evidence that habituated cognitive offloading and extrinsic motivation are the primary drivers of AI dependency in this context.',
+    keywords: ['Hybrid Learning', 'Cognitive Offloading', 'Generative AI', 'CS Education']
+  },
+  {
     id: 'uav-can-ids-2026',
     title: 'Securing UAV CAN Bus: A Dual-Schema Deep Learning Approach for Volumetric and Integrity Intrusion Detection',
     authors: ['Abdullah Khan', 'Hassan Ahmed', 'Maryam Javaid', 'Hassan Khan'],
@@ -98,17 +110,6 @@ window.NEURASEC_PUBLICATIONS = [
   },
 
   /* ───────────── Accepted / In Press ───────────── */
-  {
-    id: 'crisis-hybrid-learning-2026',
-    title: 'Crisis-Induced Hybrid Learning, Cognitive Offloading, and Generative AI Reliance Among Pakistani CS Undergraduates',
-    authors: ['Hassan Ahmed', 'Abdullah Khan', 'Arooj Fatima', 'Abdul Mateen', 'Shahrzad Saremi', 'Rania Shibl', 'Sadegh Rajaei', 'Mansooreh Mirzaei'],
-    year: 2026, type: 'journal', status: 'accepted',
-    venue: 'Education Innovations: Systems and Future Learning',
-    details: 'Emerald Publishing',
-    doi: '10.1108/EISFL-06-2026-0098',
-    pdf: 'https://www.researchgate.net/publication/414949866_Crisis-Induced_Hybrid_Learning_Cognitive_Offloading_and_Generative_AI_Reliance_Among_Pakistani_CS_Undergraduates',
-    keywords: ['Hybrid Learning', 'Cognitive Offloading', 'Generative AI', 'CS Education']
-  },
   {
     id: 'urdu-transliteration-2026',
     title: 'Urdu to Roman Urdu Transliteration Using Bi-Directional LSTM and Attention Mechanisms',
