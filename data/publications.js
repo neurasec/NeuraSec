@@ -30,6 +30,18 @@ window.NEURASEC_PUBLICATIONS = [
 
   /* ───────────── Published ───────────── */
   {
+    id: 'latent-feature-squeezing-2026',
+    title: 'Latent-Space Feature Squeezing for Adversarially Robust Intrusion Detection on IoT Edge Devices',
+    authors: ['Mansooreh Mirzaei', 'Shahrzad Saremi', 'Abdullah Khan', 'Hassan Ahmed', 'Parvin Rastegari', 'Maryam Nooraei Abadeh', 'Rania Shibl', 'Marzieh Varposhti', 'Thanh Thi Nguyen'],
+    year: 2026, type: 'journal', status: 'published',
+    venue: 'International Journal of Intelligent Computing and Cybernetics',
+    details: 'Ahead of print · pp. 1–37 · Emerald Publishing',
+    doi: '10.1108/IJICC-06-2026-0590',
+    pdf: 'https://www.emerald.com/ijicc/article-pdf/doi/10.1108/IJICC-06-2026-0590/11896647/ijicc-06-2026-0590en.pdf',
+    abstract: 'Machine learning-based intrusion detection systems (IDS) for Internet of Things (IoT) environments are vulnerable to adversarial perturbations that can cause malicious traffic to be misclassified as benign. Existing defences, such as adversarial training and feature squeezing, are typically applied independently and are not specifically designed for the heterogeneous combination of continuous and discrete features in IoT network traffic. This study proposes a robust and efficient defence framework for securing IoT IDSs against adversarial attacks. This study proposes CoLD-IDS (Coordinated Latent Defence for Intrusion Detection Systems), a two-phase defence framework that is evaluated on the Edge-IIoTset dataset, which contains more than 2.2 million samples spanning 14 attack categories from a physical IoT testbed. Phase 1 combines an IoT-adapted feature squeezing mechanism that quantizes only continuous features with multi-attack adversarial training using clean, Fast Gradient Sign Method (FGSM) and Projected Gradient Descent (PGD) samples. Phase 2 introduces a latent-space defence pipeline in which a denoising autoencoder compresses the original 52-dimensional feature space into a 32-dimensional representation, where feature squeezing and adversarial training are jointly applied. Robustness is further validated through ablation studies and Backward Pass Differentiable Approximation (BPDA) attacks. The adversarially trained multi-layer perceptron in Phase 1 achieved an accuracy of 99.58% on clean data and 99.49% under a PGD attack. The latent-space framework in Phase 2 achieved 98.90% accuracy on clean data and 98.88% under a PGD attack, corresponding to a degradation of only 0.02 percentage points. Ablation studies revealed that applying feature squeezing without training-time adaptation significantly degrades robustness, reducing PGD accuracy to 78.23% for the undefended baseline and 31.47% for latent squeezing without adversarial adaptation. BPDA evaluation confirmed that the observed robustness is not a consequence of gradient masking. Both proposed systems satisfy the latency and storage constraints of edge-based IoT deployments, achieving inference times below 4 µs per sample on CPU. This study presents CoLD-IDS, a novel two-phase adversarial defence framework that integrates IoT-specific feature squeezing with multi-attack adversarial training and extends this concept to a latent representation learned through a denoising autoencoder. Unlike existing approaches that employ these defences independently, the proposed framework jointly optimises feature transformation and adversarial adaptation, resulting in highly robust and computationally efficient intrusion detection suitable for resource-constrained IoT edge devices.',
+    keywords: ['Adversarial Robustness', 'Intrusion Detection', 'IoT', 'Edge AI']
+  },
+  {
     id: 'crisis-hybrid-learning-2026',
     title: 'Crisis-Induced Hybrid Learning, Cognitive Offloading, and Generative AI Reliance Among Pakistani CS Undergraduates',
     authors: ['Hassan Ahmed', 'Abdullah Khan', 'Arooj Fatima', 'Abdul Mateen', 'Shahrzad Saremi', 'Rania Shibl', 'Sadegh Rajaei', 'Mansooreh Mirzaei'],
@@ -119,16 +131,6 @@ window.NEURASEC_PUBLICATIONS = [
     details: 'Institute of Central Computation and Knowledge',
     pdf: 'https://www.researchgate.net/publication/414490663_Urdu_to_Roman_Urdu_Transliteration_Using_Bi-Directional_LSTM_and_Attention_Mechanisms',
     keywords: ['Urdu NLP', 'Transliteration', 'BiLSTM', 'Attention']
-  },
-  {
-    id: 'latent-feature-squeezing-2026',
-    title: 'Latent-Space Feature Squeezing for Adversarially Robust Intrusion Detection on IoT Edge Devices',
-    authors: ['Mansooreh Mirzaei', 'Shahrzad Saremi', 'Abdullah Khan', 'Hassan Ahmed', 'Parvin Rastegari', 'Maryam Nooraei Abadeh', 'Rania Shibl', 'Marzieh Varposhti', 'Thanh Thi Nguyen'],
-    year: 2026, type: 'journal', status: 'accepted',
-    venue: 'International Journal of Intelligent Computing and Cybernetics',
-    details: 'Emerald Publishing',
-    pdf: 'https://www.researchgate.net/publication/414949379_Latent-Space_Feature_Squeezing_for_Adversarially_Robust_Intrusion_Detection_on_IoT_Edge_Devices',
-    keywords: ['Adversarial Robustness', 'Intrusion Detection', 'IoT', 'Edge AI']
   },
   {
     id: 'bparc-2026',

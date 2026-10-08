@@ -14,6 +14,7 @@ window.NEURASEC_SETTINGS = {
 };
 
 window.NEURASEC_NEWS = [
+  { date: '2026-10', tag: 'Publication', text: 'Latent-space feature squeezing for adversarially robust intrusion detection on IoT edge devices (CoLD-IDS) published in the International Journal of Intelligent Computing and Cybernetics', publication: 'latent-feature-squeezing-2026' },
   { date: '2026-10', tag: 'Publication',
     text: 'Crisis-induced hybrid learning, cognitive offloading and generative AI reliance among Pakistani CS undergraduates published in Education Innovations: Systems and Future Learning (Vol. 1, No. 1)',
     publication: 'crisis-hybrid-learning-2026' },
