@@ -27,6 +27,7 @@ window.NEURASEC_NEWS = [
   { date: '2026-10', tag: 'Conference',
     text: 'Two papers to be presented at MCETS 2026 in Larnaca, Cyprus (29–30 October): an IoMT intrusion-detection benchmark and the ARTP autonomous red-team planner',
     publications: ['iomt-ids-benchmark-2026', 'artp-2026'] },
+  { date: '2026-09', tag: 'Publication', text: 'MR-DiffDBSCAN, a MapReduce-based framework for scalable crowd behaviour analysis in social networks, accepted in Data Technologies and Applications', publication: 'mr-diffdbscan-2026' },
   { date: '2026-07', tag: 'Membership',
     text: 'Amira Mahcene (University of Constantine 2, Algeria) joins as a researcher, with interests in AI in healthcare and distributed applications',
     members: ['amira-mahcene'] },

@@ -123,6 +123,14 @@ window.NEURASEC_PUBLICATIONS = [
 
   /* ───────────── Accepted / In Press ───────────── */
   {
+    id: 'mr-diffdbscan-2026',
+    title: 'MR-DiffDBSCAN: A MapReduce-Based Framework for Scalable Crowd Behavior Analysis in Social Networks',
+    authors: ['Sanaa S. Almansur', 'Maryam Nooraei Abadeh', 'Mansooreh Mirzaei', 'Shahrzad Saremi', 'Rania Shibl', 'Hassan Ahmed'],
+    year: 2026, type: 'journal', status: 'accepted',
+    venue: 'Data Technologies and Applications', details: 'Emerald Publishing',
+    keywords: ['MapReduce', 'DBSCAN', 'Crowd Behaviour', 'Social Networks']
+  },
+  {
     id: 'urdu-transliteration-2026',
     title: 'Urdu to Roman Urdu Transliteration Using Bi-Directional LSTM and Attention Mechanisms',
     authors: ['Hassan Ahmed', 'Abdullah Khan', 'Hassan Khan'],
@@ -214,14 +222,6 @@ window.NEURASEC_PUBLICATIONS = [
     year: 2026, type: 'journal', status: 'review',
     venue: 'Social Network Analysis and Mining', details: 'Springer',
     keywords: ['Urdu NLP', 'Toxicity Detection', 'Survey', 'Datasets']
-  },
-  {
-    id: 'mr-diffdbscan-2026',
-    title: 'MR-DiffDBSCAN: A MapReduce-Based Framework for Scalable Crowd Behavior Analysis in Social Networks',
-    authors: ['Sanaa S. Almansur', 'Maryam Nooraei Abadeh', 'Mansooreh Mirzaei', 'Shahrzad Saremi', 'Rania Shibl', 'Hassan Ahmed'],
-    year: 2026, type: 'journal', status: 'review',
-    venue: 'Data Technologies and Applications', details: 'Emerald Publishing',
-    keywords: ['MapReduce', 'DBSCAN', 'Crowd Behaviour', 'Social Networks']
   },
   {
     id: 'chatbot-oos-2026',
