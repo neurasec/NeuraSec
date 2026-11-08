@@ -159,7 +159,7 @@ window.NEURASEC_PUBLICATIONS = [
   },
   {
     id: 'phishattn-2026',
-    title: 'PhishAttn: A Hybrid CNN-BiLSTM-Attention Framework for Semantic and Statistical Phishing URLs Detection',
+    title: 'PhishAttn: Fusing Character-Level Sequence Features and Lexical Descriptors for Phishing URL Detection Across Heterogeneous Sources',
     authors: ['Hassan Ahmed', 'Arooj Fatima', 'Abdullah Khan', 'Shahrzad Saremi', 'Rania Shibl', 'Mansooreh Mirzaei'],
     year: 2026, type: 'journal', status: 'review',
     venue: 'International Journal of Machine Learning and Cybernetics', details: 'Springer Nature',
@@ -239,8 +239,93 @@ window.NEURASEC_PUBLICATIONS = [
     year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
     keywords: ['DDoS', 'Autoencoder', 'Random Forest', 'Intrusion Detection']
   },
+  {
+    id: 'bidsleep-2026',
+    title: 'Beyond Single-Night Wearable Sleep Staging: Modality, Unlabelled Longitudinal History, and Annotation Quality in BIDSleep',
+    authors: ['Shiva Jahanaray', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Gordana Dermody'],
+    year: 2026, type: 'journal', status: 'review',
+    venue: 'Medical & Biological Engineering & Computing', details: 'Springer',
+    keywords: ['Sleep Staging', 'Wearables', 'Digital Health']
+  },
+  {
+    id: 'weed-detector-transfer-2026',
+    title: 'Asymmetric Transfer of a Lightweight Weed Detector Between Two Australian Wheat Fields',
+    authors: ['Damilare Ogunjobi', 'Hassan Ahmed', 'Abdullah Khan', 'Shahrzad Saremi', 'Rania Shibl'],
+    year: 2026, type: 'journal', status: 'review',
+    venue: 'Precision Agriculture', details: 'Springer',
+    keywords: ['Weed Detection', 'Transfer Learning', 'Precision Agriculture', 'Lightweight Models']
+  },
 
   /* ───────────── Submitted (awaiting peer review) ───────────── */
+  {
+    id: 'kamalpour-claim-oriented-bibliometrics-2026',
+    title: 'Beyond the Map: A Claim-Oriented Framework for Valid, Robust, and Reproducible Bibliometric Research',
+    authors: ['Mostafa Kamalpour', 'Hassan Ahmed', 'Shahrzad Saremi', 'Thanh Thi Nguyen', 'Akhlaqur Rahman', 'Rania Shibl'],
+    year: 2026, type: 'journal', status: 'submitted',
+    venue: 'Computing Surveys', details: 'ACM',
+    keywords: ['Bibliometrics', 'Reproducibility', 'Research Methods']
+  },
+  {
+    id: 'knee-mri-reports-2026',
+    title: 'How Far Can Radiology Reports Supervise Knee MRI AI? Coverage, Accuracy, and Reference-Standard Effects in a 12-Finding Multi-Plane Model',
+    authors: ['Malahat Mardani', 'Mounes Mardani', 'Hassan Ahmed', 'Shahrzad Saremi', 'Gordana Dermody', 'Rania Shibl'],
+    year: 2026, type: 'journal', status: 'submitted',
+    venue: 'Journal of Imaging Informatics in Medicine', details: 'Springer',
+    keywords: ['Knee MRI', 'Radiology Reports', 'Weak Supervision', 'Medical Imaging']
+  },
+  {
+    id: 'quantum-glioma-dice-2026',
+    title: 'Same Weights, Different Dice: Post-Processing and Evaluation Effects in a Hybrid Quantum Glioma Segmenter',
+    authors: ['Abdullah Khan', 'Hassan Ahmed', 'Bisma Ali', 'Shahrzad Saremi', 'Mingzhong Wang', 'Thanh Thi Nguyen'],
+    year: 2026, type: 'journal', status: 'submitted',
+    venue: 'ACM Transactions on Computing for Healthcare', details: 'ACM',
+    keywords: ['Quantum Machine Learning', 'Glioma Segmentation', 'Medical Imaging']
+  },
+  {
+    id: 'quantum-unet-glioma-2026',
+    title: 'Stem-Level Quantum Context Injection in a Full-Width U-Net for Lower-Grade Glioma Segmentation',
+    authors: ['Abdullah Khan', 'Hassan Ahmed', 'Bisma Ali', 'Shahrzad Saremi', 'Gordana Dermody', 'Thanh Thi Nguyen'],
+    year: 2026, type: 'journal', status: 'submitted',
+    venue: 'ACM Transactions on Quantum Computing', details: 'ACM',
+    keywords: ['Quantum Machine Learning', 'U-Net', 'Glioma Segmentation']
+  },
+  {
+    id: 'resume-job-matching-2026',
+    title: 'Where Does the Benefit of Sentence Encoders Come From in Resume–Job Matching? A Controlled Comparison with TF-IDF',
+    authors: ['Meerab Fatima', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl'],
+    year: 2026, type: 'journal', status: 'submitted',
+    venue: 'ACM Transactions on Information Systems', details: 'ACM',
+    keywords: ['Resume Matching', 'Sentence Encoders', 'TF-IDF', 'NLP']
+  },
+  {
+    id: 'genai-trust-hci-2027',
+    title: 'From Personal Confidence to Public Concern: The Uneven Landscape of Generative AI Trust',
+    authors: ['Tanja Pavleska', 'Shahrzad Saremi', 'Rania Shibl', 'Hassan Ahmed', 'Martin Mihajlov'],
+    year: 2026, type: 'conference', status: 'submitted',
+    venue: 'AI-HCI: 8th International Conference on Artificial Intelligence in HCI (HCI International 2027)', details: 'Estrel Hotel and Congress Center, Berlin, Germany, 25–30 July 2027',
+    keywords: ['Generative AI', 'Trust', 'Human-Computer Interaction']
+  },
+  {
+    id: 'genai-outsourcing-learning-2026',
+    title: 'Outsourcing or Learning? Behavioral Pathways of Generative AI Use and Their Associations with Self-Efficacy, Critical Evaluation, and Motivation Among Computer Science Undergraduates',
+    authors: ['Hassan Ahmed', 'Sadegh Rajaei', 'Shahrzad Saremi', 'Rania Shibl', 'Mingzhong Wang', 'Thanh Thi Nguyen'],
+    year: 2026, type: 'journal', status: 'submitted',
+    keywords: ['Generative AI', 'Self-Efficacy', 'Critical Thinking', 'CS Education']
+  },
+  {
+    id: 'iot-lightweight-anomaly-2026',
+    title: 'Lightweight Deep Anomaly Detectors for Heterogeneous, Resource-Constrained IoT Devices',
+    authors: ['Hassan Ahmed', 'Furqan Ahmad', 'Kehkashan Kiran', 'Shahrzad Saremi', 'Mingzhong Wang', 'Rania Shibl'],
+    year: 2026, type: 'journal', status: 'submitted',
+    keywords: ['Anomaly Detection', 'IoT', 'Edge AI', 'Lightweight Models']
+  },
+  {
+    id: 'stress-state-multimodal-2026',
+    title: 'Subject-Independent Stress-State Classification from EEG, fNIRS, and Wrist-Worn Signals: Masked Attention Fusion Tested Against a Protocol-Time Control',
+    authors: ['Abdul Mateen', 'Muhammad Fayyaz', 'Hassan Ahmed', 'Ali Haider', 'Shahrzad Saremi'],
+    year: 2026, type: 'journal', status: 'submitted',
+    keywords: ['Stress Detection', 'EEG', 'fNIRS', 'Multimodal Fusion']
+  },
   {
     id: 'agri-price-forecasting-2026',
     title: 'Explainable Ensemble Machine Learning for Agricultural Producer Price Forecasting: A Framework for Transparent Market Intelligence',
@@ -248,14 +333,6 @@ window.NEURASEC_PUBLICATIONS = [
     year: 2026, type: 'journal', status: 'submitted',
     venue: 'The Australian Journal of Agricultural and Resource Economics',
     keywords: ['Price Forecasting', 'Ensemble Learning', 'XAI', 'Agriculture']
-  },
-  {
-    id: 'bidsleep-2026',
-    title: 'Beyond Single-Night Wearable Sleep Staging: Modality, Unlabelled Longitudinal History, and Annotation Quality in BIDSleep',
-    authors: ['Shiva Jahanaray', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Gordana Dermody'],
-    year: 2026, type: 'journal', status: 'submitted',
-    venue: 'Medical & Biological Engineering & Computing', details: 'Springer',
-    keywords: ['Sleep Staging', 'Wearables', 'Digital Health']
   },
   {
     id: 'travel-planning-llm-2026',
@@ -286,7 +363,7 @@ window.NEURASEC_PUBLICATIONS = [
     title: 'Mapping Artificial Intelligence and Machine Learning Research in Sports Injury Prediction: A Bibliometric Analysis with Growth Modelling, Thematic Evolution and a Research Agenda',
     authors: ['Sepehr Amooeinejad', 'Mohamadali Rezaeimanesh', 'Hassan Ahmed', 'Mostafa Kamalpour', 'Shahrzad Saremi', 'Rania Shibl'],
     year: 2026, type: 'journal', status: 'submitted',
-    venue: 'European Journal of Sport Science', details: 'Wiley',
+    venue: 'European Journal of Education', details: 'Wiley',
     keywords: ['Sports Injury', 'Bibliometrics', 'Machine Learning']
   },
   {
@@ -334,7 +411,7 @@ window.NEURASEC_PUBLICATIONS = [
     title: 'A Context-Aware Multimodal Intelligent Agent for Personalized Hydration Monitoring and Adaptive Alert Management',
     authors: ['Ikenna Ukabuiro', 'Sunil Raj', 'Khandaker Sohada', 'Akhlaqur Rahman', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl'],
     year: 2026, type: 'journal', status: 'submitted',
-    venue: 'Biomedical Signal Processing & Control', details: 'Elsevier',
+    venue: 'Data Technologies and Applications', details: 'Emerald Publishing',
     keywords: ['Hydration Monitoring', 'Intelligent Agents', 'Multimodal AI']
   },
   {
