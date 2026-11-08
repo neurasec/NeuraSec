@@ -177,7 +177,7 @@ class Builder:
 
     def static_nav(self):
         pages = [('index.html', 'Home'), ('research.html', 'Research'), ('publications.html', 'Publications'), ('people.html', 'People'),
-                 ('network.html', 'Global Reach'), ('news.html', 'News'), ('join.html', 'Join Us'), ('contact.html', 'Contact'),
+                 ('network.html', 'Global Reach'), ('news.html', 'News'), ('tools.html', 'Tools'), ('join.html', 'Join Us'), ('contact.html', 'Contact'),
                  ('privacy.html', 'Privacy')]
         return '<nav class="static-nav" aria-label="Site"><strong>NeuraSec</strong>' + ''.join(
             '<a href="%s">%s</a>' % (h, l) for h, l in pages) + '</nav>'
@@ -331,7 +331,7 @@ class Builder:
 
     # ── generated files ──
     def write_sitemap(self):
-        urls = ['', 'research.html', 'publications.html', 'people.html', 'network.html', 'news.html', 'join.html', 'contact.html', 'privacy.html']
+        urls = ['', 'research.html', 'publications.html', 'people.html', 'network.html', 'news.html', 'tools.html', 'join.html', 'contact.html', 'privacy.html']
         urls += [self.profile_href(m) for m in self.S.members]
         rows = ''.join('  <url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n' % (self.url, u, self.today) for u in urls)
         open(os.path.join(self.out, 'sitemap.xml'), 'w', encoding='utf-8', newline=NL).write(

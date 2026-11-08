@@ -67,9 +67,9 @@ window.NEURASEC_PARTNERS = [
 
 window.NEURASEC_TOOLS = [
   {
-    name: 'AuthentiCite',
-    tagline: 'References → BibTeX',
-    description: 'Paste any citation format. Smart preprocessing routes each reference through a DOI fast-path, multi-strategy API search, and an LLM structural fallback — with AI hallucination detection.',
+    name: 'AuthentiCite — Verify, Authenticate, Convert',
+    tagline: 'Reference resolver · References → BibTeX',
+    description: 'Paste citations in any style, or upload a PDF or Word paper. Each one is matched against Crossref, OpenAlex and Semantic Scholar, then shown side by side with its BibTeX so you can confirm it got the right paper.',
     url: 'https://hassanahmed1166.github.io/ref-to-bibtex/',
     authors: ['hassan-ahmed']
   }

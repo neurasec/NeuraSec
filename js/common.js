@@ -503,6 +503,7 @@
     ['people', 'people.html', 'People'],
     ['network', 'network.html', 'Global Reach'],
     ['news', 'news.html', 'News'],
+    ['tools', 'tools.html', 'Tools'],
     ['join', 'join.html', 'Join Us'],
     ['contact', 'contact.html', 'Contact']
   ];
