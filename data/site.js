@@ -14,6 +14,9 @@ window.NEURASEC_SETTINGS = {
 };
 
 window.NEURASEC_NEWS = [
+  { date: '2026-11', tag: 'Conference',
+    text: 'Six papers accepted for the 2027 IEEE Symposium Series on Computational Intelligence (SSCI 2027), Gold Coast, Queensland, Australia',
+    publications: ['dyslexia-handwriting-2026', 'iot-malware-leakage-2026', 'milk10k-skin-lesion-2026', 'chatbot-oos-2026', 'wildfire-monitoring-2026', 'prescriber-fragmentation-2026'] },
   { date: '2026-10', tag: 'Publication', text: 'Latent-space feature squeezing for adversarially robust intrusion detection on IoT edge devices (CoLD-IDS) published in the International Journal of Intelligent Computing and Cybernetics', publication: 'latent-feature-squeezing-2026' },
   { date: '2026-10', tag: 'Publication',
     text: 'Crisis-induced hybrid learning, cognitive offloading and generative AI reliance among Pakistani CS undergraduates published in Education Innovations: Systems and Future Learning (Vol. 1, No. 1)',

@@ -148,15 +148,50 @@ window.NEURASEC_PUBLICATIONS = [
     venue: MCETS_2026.venue, details: MCETS_2026.details,
     keywords: ['Red Teaming', 'Autonomous Agents', 'Penetration Testing', 'AI Safety']
   },
-
-  /* ───────────── Under Review ───────────── */
   {
     id: 'dyslexia-handwriting-2026',
     title: 'Benchmark Saturation in Synthetic Dyslexia Handwriting Detection: A Seven-Detector Dual-Domain Evaluation With Intrinsic and EigenCAM Explainability',
     authors: ['Javeria Iqbal', 'Hassan Ahmed', 'Hanzla Iqbal', 'Shahrzad Saremi', 'Rania Shibl', 'Alan Wee-Chung Liew', 'Akhlaqur Rahman', 'Mostafa Kamalpour'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
+    year: 2026, type: 'conference', status: 'accepted', ...SSCI_2027,
     keywords: ['Dyslexia', 'Handwriting Analysis', 'Object Detection', 'Explainability', 'EigenCAM']
   },
+  {
+    id: 'iot-malware-leakage-2026',
+    title: 'Leakage-Controlled Dynamic Analysis for Cross-Architecture IoT Malware Detection',
+    authors: ['Arooj Fatima', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Alan Wee-Chung Liew', 'Akhlaqur Rahman'],
+    year: 2026, type: 'conference', status: 'accepted', ...SSCI_2027,
+    keywords: ['IoT Malware', 'Dynamic Analysis', 'Data Leakage', 'Cybersecurity']
+  },
+  {
+    id: 'milk10k-skin-lesion-2026',
+    title: 'Multimodal Fusion of Paired Clinical and Dermoscopic Images for Long-Tailed Skin Lesion Classification on MILK10k',
+    authors: ['Bisma Ali', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Alan Wee-Chung Liew', 'Thanh Thi Nguyen'],
+    year: 2026, type: 'conference', status: 'accepted', ...SSCI_2027,
+    keywords: ['Skin Lesions', 'Multimodal Fusion', 'Dermoscopy', 'Long-Tailed Learning']
+  },
+  {
+    id: 'chatbot-oos-2026',
+    title: 'How Confident Should a Chatbot Be? Computational Intelligence for Honest Out-of-Scope Detection in Intent Recognition',
+    authors: ['Muhammad Irfan Aslam', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Akhlaqur Rahman'],
+    year: 2026, type: 'conference', status: 'accepted', ...SSCI_2027,
+    keywords: ['Chatbots', 'Intent Recognition', 'Out-of-Scope Detection', 'Calibration']
+  },
+  {
+    id: 'wildfire-monitoring-2026',
+    title: 'Stress-Testing Computational Intelligence for Australian Wildfire Monitoring: Continental-Scale Clustering, Forecasting, and Sensor Placement',
+    authors: ['Bisma Ali', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Amin Beheshti', 'Akhlaqur Rahman'],
+    year: 2026, type: 'conference', status: 'accepted', ...SSCI_2027,
+    keywords: ['Wildfire', 'Forecasting', 'Clustering', 'Sensor Placement']
+  },
+  {
+    id: 'prescriber-fragmentation-2026',
+    title: 'Detecting Prescriber Fragmentation with AI-Informed Trajectory Analysis',
+    authors: ['Svetlana Kolos', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Mostafa Kamalpour', 'Amin Beheshti'],
+    year: 2026, type: 'conference', status: 'accepted', ...SSCI_2027,
+    keywords: ['Healthcare Analytics', 'Trajectory Analysis', 'Prescribing']
+  },
+
+  /* ───────────── Under Review ───────────── */
   {
     id: 'phishattn-2026',
     title: 'PhishAttn: Fusing Character-Level Sequence Features and Lexical Descriptors for Phishing URL Detection Across Heterogeneous Sources',
@@ -165,20 +200,6 @@ window.NEURASEC_PUBLICATIONS = [
     venue: 'International Journal of Machine Learning and Cybernetics', details: 'Springer Nature',
     abstract: 'Phishing attacks impersonate legitimate URLs to steal credentials and financial data. Rule-based detectors fail against rapidly evolving techniques; ML methods rely on handcrafted features. We propose PhishAttn — a hybrid CNN-BiLSTM-Attention model that automatically extracts local and sequential URL features. Evaluated on Kaggle, Mendeley, and PhiUSIIL datasets, the model achieves accuracies of 95.98%, 98.90%, and 99.80% respectively, with an overall accuracy of 98.28% and AUC-ROC of 0.9979.',
     keywords: ['Phishing Detection', 'CNN', 'BiLSTM', 'Attention', 'Cybersecurity']
-  },
-  {
-    id: 'eclipse-infoveillance-2026',
-    title: 'Multilingual Computational Infoveillance of Ocular Risk During the 2026 Solar Eclipse',
-    authors: ['Hassan Ahmed', 'Shahrzad Saremi', 'Alan Wee-Chung Liew', 'Rania Shibl', 'Thanh Thi Nguyen', 'Judy Watson'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
-    keywords: ['Infoveillance', 'Multilingual NLP', 'Public Health', 'Social Media']
-  },
-  {
-    id: 'flood-susceptibility-2026',
-    title: 'A Computational-Intelligence Framework for Flood Susceptibility Mapping and Warning-Chain Diagnosis',
-    authors: ['Hassan Ahmed', 'Abdul Mateen', 'Shahrzad Saremi', 'Alan Wee-Chung Liew', 'Rania Shibl', 'Hilda Jemutai Bitok', 'Mingzhong Wang'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
-    keywords: ['Flood Risk', 'Susceptibility Mapping', 'Early Warning', 'Computational Intelligence']
   },
   {
     id: 'jbdm-2026',
@@ -196,48 +217,6 @@ window.NEURASEC_PUBLICATIONS = [
     year: 2026, type: 'journal', status: 'review',
     venue: 'Physical and Engineering Sciences in Medicine', details: 'Springer',
     keywords: ['Medical Imaging', 'Chest X-ray', 'Squeeze-and-Excitation', 'Lung Disease']
-  },
-  {
-    id: 'chatbot-oos-2026',
-    title: 'How Confident Should a Chatbot Be? Computational Intelligence for Honest Out-of-Scope Detection in Intent Recognition',
-    authors: ['Muhammad Irfan Aslam', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Akhlaqur Rahman'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
-    keywords: ['Chatbots', 'Intent Recognition', 'Out-of-Scope Detection', 'Calibration']
-  },
-  {
-    id: 'iot-malware-leakage-2026',
-    title: 'Leakage-Controlled Dynamic Analysis for Cross-Architecture IoT Malware Detection',
-    authors: ['Arooj Fatima', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Alan Wee-Chung Liew', 'Akhlaqur Rahman'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
-    keywords: ['IoT Malware', 'Dynamic Analysis', 'Data Leakage', 'Cybersecurity']
-  },
-  {
-    id: 'milk10k-skin-lesion-2026',
-    title: 'Multimodal Fusion of Paired Clinical and Dermoscopic Images for Long-Tailed Skin Lesion Classification on MILK10k',
-    authors: ['Bisma Ali', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Alan Wee-Chung Liew', 'Thanh Thi Nguyen'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
-    keywords: ['Skin Lesions', 'Multimodal Fusion', 'Dermoscopy', 'Long-Tailed Learning']
-  },
-  {
-    id: 'wildfire-monitoring-2026',
-    title: 'Stress-Testing Computational Intelligence for Australian Wildfire Monitoring: Continental-Scale Clustering, Forecasting, and Sensor Placement',
-    authors: ['Bisma Ali', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Amin Beheshti', 'Akhlaqur Rahman'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
-    keywords: ['Wildfire', 'Forecasting', 'Clustering', 'Sensor Placement']
-  },
-  {
-    id: 'prescriber-fragmentation-2026',
-    title: 'Detecting Prescriber Fragmentation with AI-Informed Trajectory Analysis',
-    authors: ['Svetlana Kolos', 'Hassan Ahmed', 'Shahrzad Saremi', 'Rania Shibl', 'Mostafa Kamalpour', 'Amin Beheshti'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
-    keywords: ['Healthcare Analytics', 'Trajectory Analysis', 'Prescribing']
-  },
-  {
-    id: 'ae-rf-ddos-2026',
-    title: 'Hybrid Autoencoder–Random Forest Framework for DDoS Intrusion Detection with Leakage-Aware Normalization',
-    authors: ['Marzieh Varposhti', 'Mansooreh Mirzaei', 'Maryam Nooraei Abadeh', 'Shahrzad Saremi', 'Hassan Ahmed', 'Rania Shibl', 'Abdullah Khan', 'Thanh Thi Nguyen'],
-    year: 2026, type: 'conference', status: 'review', ...SSCI_2027,
-    keywords: ['DDoS', 'Autoencoder', 'Random Forest', 'Intrusion Detection']
   },
   {
     id: 'bidsleep-2026',
