@@ -238,6 +238,20 @@ window.NEURASEC_MEMBERS = [
     photo: 'samia-mujahid.jpg'
   },
   {
+    id: 'meerab-fatima',
+    orcid: '0009-0000-5527-4920',
+    name: 'Meerab Fatima',
+    group: 'core',
+    role: 'Researcher',
+    institution: 'Department of Computer Science, FAST National University of Computer and Emerging Sciences (FAST-NUCES), Peshawar Campus',
+    country: 'Pakistan', flag: '🇵🇰',
+    location: { city: 'Peshawar', lat: 34.01, lng: 71.58 },
+    joined: '2026-11',
+    expertise: ['Recommender Systems', 'NLP', 'Information Retrieval', 'Large Language Models', 'Career & Skill-Gap Analysis'],
+    links: { linkedin: 'https://www.linkedin.com/in/meerabfatima' },
+    photo: 'meerab-fatima.jpg'
+  },
+  {
     id: 'khadija-arain',
     name: 'Khadija Arain',
     group: 'core',

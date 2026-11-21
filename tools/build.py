@@ -189,7 +189,6 @@ class Builder:
             'name': 'NeuraSec Research Group', 'url': self.url, 'logo': self.url + 'images/logo.png',
             'image': self.url + 'images/og-image.png', 'email': 'neurasec1@gmail.com', 'foundingDate': '2024-08',
             'description': 'An international research group working on cybersecurity, deep learning, natural language processing and explainable AI.',
-            'address': {'@type': 'PostalAddress', 'addressLocality': 'Chiniot', 'addressCountry': 'PK'},
             'sameAs': ['https://www.linkedin.com/company/neurasec-research-group/'],
             'knowsAbout': ['Cybersecurity', 'Deep learning', 'Natural language processing', 'Explainable AI', 'AI in healthcare']}
 

@@ -699,7 +699,6 @@
             NAV.slice(4).map(([, h, l]) => link(h, l)).join('') + '</nav>' +
           '<div class="footer__col"><h2 class="footer__h">Get in touch</h2>' +
             '<a href="mailto:neurasec1@gmail.com">neurasec1@gmail.com</a>' +
-            '<span class="footer__note">FAST-NUCES, Chiniot-Faisalabad Campus, Pakistan</span>' +
             '<button class="footer__kbd" type="button" id="footerSearch">' + NS.icon.search + 'Search the site <kbd>/</kbd></button>' +
           '</div>' +
         '</div>' +
