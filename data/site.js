@@ -14,6 +14,9 @@ window.NEURASEC_SETTINGS = {
 };
 
 window.NEURASEC_NEWS = [
+  { date: '2026-11', tag: 'Membership',
+    text: 'Dr. Aftab Ara (Assistant Professor, College of Business, University of Hail, Saudi Arabia) joins as an international advisor, with expertise in AI impact in business, human resource and knowledge management, sustainable development and generative AI',
+    members: ['aftab-ara'] },
   { date: '2026-11', tag: 'Conference',
     text: 'Six papers accepted for the 2027 IEEE Symposium Series on Computational Intelligence (SSCI 2027), Gold Coast, Queensland, Australia',
     publications: ['dyslexia-handwriting-2026', 'iot-malware-leakage-2026', 'milk10k-skin-lesion-2026', 'chatbot-oos-2026', 'wildfire-monitoring-2026', 'prescriber-fragmentation-2026'] },

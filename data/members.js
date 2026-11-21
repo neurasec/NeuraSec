@@ -176,6 +176,23 @@ window.NEURASEC_MEMBERS = [
     },
     photo: 'ngo-nguyen-quynh-nhu.jpg'
   },
+  {
+    id: 'aftab-ara',
+    orcid: '0000-0002-2239-5897',
+    prefix: 'Dr.',
+    name: 'Aftab Ara',
+    group: 'advisors',
+    role: 'Assistant Professor',
+    institution: 'Department of Management and MIS, College of Business, University of Hail',
+    country: 'Saudi Arabia', flag: '🇸🇦',
+    location: { city: 'Hail', lat: 27.52, lng: 41.69 },
+    joined: '2026-11',
+    expertise: ['AI Impact in Business', 'Human Resource Management', 'Knowledge Management', 'Sustainable Development', 'Generative AI'],
+    links: {
+      linkedin: 'https://www.linkedin.com/in/dr-aftab-ara/',
+      scholar: 'https://scholar.google.com/citations?user=KcPOZmEAAAAJ'
+    }
+  },
 
   /* ── Core Researchers & Members ── */
   {
